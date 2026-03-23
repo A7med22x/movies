@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:movies/core/resources/assets_manager.dart';
 import 'package:movies/core/resources/color_manager.dart';
+import 'package:movies/features/browse/view/widgets/browse_tab.dart';
 import 'package:movies/features/home/view/widgets/custom_bottom_nav_bar_item.dart';
 import 'package:movies/features/home/view/widgets/home_tab.dart';
 
@@ -53,8 +54,11 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  void changeSelectedIndex(int selectedIndex) =>
-      setState(() => currentIndex = selectedIndex);
+  void changeSelectedIndex(int selectedIndex) {
+    if (currentIndex == selectedIndex) return;
+    currentIndex = selectedIndex;
+    setState(() {});
+  }
 }
 
 class ProfileTab extends StatelessWidget {
@@ -72,14 +76,5 @@ class SearchTab extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const Center(child: Text('Search Tab'));
-  }
-}
-
-class BrowseTab extends StatelessWidget {
-  const BrowseTab();
-
-  @override
-  Widget build(BuildContext context) {
-    return const Center(child: Text('Browse Tab'));
   }
 }
