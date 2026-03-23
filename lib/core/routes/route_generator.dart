@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:movies/core/routes/routes.dart';
+import 'package:movies/features/home/view/screens/home_screen.dart';
 import 'package:movies/features/onBoarding/view/screens/on_boarding_screen.dart';
 
 class RouteGenerator {
@@ -7,6 +8,8 @@ class RouteGenerator {
     switch (settings.name) {
       case Routes.onBoarding:
         return MaterialPageRoute(builder: (_) => const OnBoardingScreen());
+      case Routes.home:
+        return MaterialPageRoute(builder: (_) => const HomeScreen());
       default:
         return _undefinedRoute();
     }
