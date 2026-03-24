@@ -77,9 +77,10 @@ class PageViewItem extends StatelessWidget {
                   onTap: onNext,
                 ),
                 const SizedBox(height: Sizes.s16),
-                currentIndex < 2
+                onBoardingModel.button2Name == null
                     ? const SizedBox()
                     : CustomElevatedButton(
+                        backgroundColor: ColorManager.lightBlack,
                         label: onBoardingModel.button2Name!,
                         onTap: onBack,
                       ),

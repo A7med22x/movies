@@ -36,8 +36,9 @@ class CustomSectionBar extends StatelessWidget {
                     fontSize: 16,
                   ),
                 ),
+                const SizedBox(width: 4),
                 Icon(
-                  Icons.arrow_forward_ios,
+                  Icons.arrow_forward,
                   size: 16,
                   color: ColorManager.primary,
                 ),

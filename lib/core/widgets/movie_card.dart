@@ -6,6 +6,7 @@ import 'package:movies/core/resources/assets_manager.dart';
 import 'package:movies/core/resources/color_manager.dart';
 import 'package:movies/core/resources/font_manager.dart';
 import 'package:movies/core/resources/styles_manager.dart';
+import 'package:movies/core/routes/routes.dart';
 
 class MovieCard extends StatelessWidget {
   const MovieCard({super.key});
@@ -15,7 +16,9 @@ class MovieCard extends StatelessWidget {
     final double height = MediaQuery.sizeOf(context).height;
     final double width = MediaQuery.sizeOf(context).width;
     return InkWell(
-      onTap: () {},
+      onTap: () {
+        Navigator.of(context).pushNamed(Routes.movieDetails);
+      },
       child: Container(
         margin: EdgeInsets.all(6.w),
         decoration: BoxDecoration(

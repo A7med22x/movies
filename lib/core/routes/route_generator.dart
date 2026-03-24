@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:movies/core/routes/routes.dart';
 import 'package:movies/features/home/view/screens/home_screen.dart';
+import 'package:movies/features/movie_details/view/screens/movie_details_screen.dart';
 import 'package:movies/features/onBoarding/view/screens/on_boarding_screen.dart';
 
 class RouteGenerator {
@@ -10,6 +11,8 @@ class RouteGenerator {
         return MaterialPageRoute(builder: (_) => const OnBoardingScreen());
       case Routes.home:
         return MaterialPageRoute(builder: (_) => const HomeScreen());
+      case Routes.movieDetails:
+        return MaterialPageRoute(builder: (_) => const MovieDetailsScreen());
       default:
         return _undefinedRoute();
     }

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:carousel_slider_plus/carousel_slider_plus.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:movies/core/resources/assets_manager.dart';
+import 'package:movies/core/resources/color_manager.dart';
 import 'package:movies/core/widgets/movie_card.dart';
 import 'package:movies/features/home/view/widgets/custom_section_bar.dart';
 
@@ -24,6 +25,19 @@ class HomeTab extends StatelessWidget {
                 fit: BoxFit.cover,
                 height: double.infinity,
                 width: double.infinity,
+              ),
+              Container(
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    colors: [
+                      ColorManager.background.withValues(alpha: .8),
+                      ColorManager.background.withValues(alpha: .6),
+                      ColorManager.background,
+                    ],
+                    begin: Alignment.topCenter,
+                    end: Alignment.topCenter,
+                  ),
+                ),
               ),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
