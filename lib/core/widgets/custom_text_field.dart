@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:movies/core/resources/color_manager.dart';
 import 'package:movies/core/resources/font_manager.dart';
+import 'package:movies/core/resources/new_styles_manager.dart';
 import 'package:movies/core/resources/styles_manager.dart';
 
 class CustomTextField extends StatefulWidget {
@@ -112,7 +113,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
       maxLines: widget.maxLines,
       readOnly: widget.readOnly,
       cursorColor: ColorManager.primary,
-      style: getMediumStyle(color: ColorManager.white, fontSize: FontSize.s20),
+      style: NewStylesManager.textstyle16,
     );
   }
 }
