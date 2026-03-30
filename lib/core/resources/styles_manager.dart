@@ -3,11 +3,7 @@ import 'package:movies/core/resources/color_manager.dart';
 import 'package:movies/core/resources/font_manager.dart';
 
 TextStyle _getTextStyle(double fontSize, FontWeight fontWeight, Color color) =>
-    TextStyle(
-      fontSize: fontSize,
-      color: color,
-      fontWeight: fontWeight,
-    );
+    TextStyle(fontSize: fontSize, color: color, fontWeight: fontWeight);
 
 TextStyle getLightStyle({double? fontSize, required Color color}) =>
     _getTextStyle(fontSize ?? FontSize.s12, FontWeightManager.light, color);

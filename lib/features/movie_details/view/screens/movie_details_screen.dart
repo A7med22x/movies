@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:movies/core/resources/color_manager.dart';
+import 'package:movies/features/home/data/models/movie.dart';
 import 'package:movies/features/movie_details/view/widgets/custom_bar_section.dart';
 import 'package:movies/features/movie_details/view/widgets/custom_cast_section.dart';
 import 'package:movies/features/movie_details/view/widgets/custom_details_section.dart';
@@ -15,6 +16,7 @@ class MovieDetailsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.sizeOf(context);
+    final movie = ModalRoute.of(context)?.settings.arguments as Movie;
     final List<String> imagesURL = [
       'https://tse2.mm.bing.net/th/id/OIP.Jo8oYmsbxEI5QSGNx9wtaQHaD1?pid=Api&h=220&P=0',
       'https://tse2.mm.bing.net/th/id/OIP.Jo8oYmsbxEI5QSGNx9wtaQHaD1?pid=Api&h=220&P=0',
@@ -32,8 +34,7 @@ class MovieDetailsScreen extends StatelessWidget {
               child: Stack(
                 children: [
                   CachedNetworkImage(
-                    imageUrl:
-                        'https://tse1.mm.bing.net/th/id/OIP.xRMA0d0BJ4C_gg5UVSdg6gHaLH?pid=Api&h=220&P=0',
+                    imageUrl: movie.largeCoverImage!,
                     fit: BoxFit.cover,
                     height: double.infinity,
                     width: double.infinity,
@@ -56,8 +57,8 @@ class MovieDetailsScreen extends StatelessWidget {
                     left: 0,
                     bottom: size.height * .12,
                     child: CustomDetailsSection(
-                      year: '2022',
-                      title: 'Doctor Strange in the Multiverse of Madness',
+                      year: '${movie.year}',
+                      title: movie.title!,
                     ),
                   ),
                   Positioned(
@@ -65,8 +66,8 @@ class MovieDetailsScreen extends StatelessWidget {
                     left: 16,
                     bottom: 16,
                     child: CustomBarSection(
-                      rating: '7.7',
-                      time: '90',
+                      rating: '${movie.rating}',
+                      time: '${movie.runtime}',
                       like: '50',
                     ),
                   ),
@@ -80,16 +81,13 @@ class MovieDetailsScreen extends StatelessWidget {
                 children: [
                   CustomScreenShotsSection(imagesURL: imagesURL),
                   const SizedBox(height: 16),
-                  CustomSimilarSection(),
+                  //CustomSimilarSection(movie: ,),
                   const SizedBox(height: 16),
-                  CustomSummarySection(
-                    summary:
-                        'Following the events of Spider-Man No Way Home, Doctor Strange unwittingly casts a forbidden spell that accidentally opens up the multiverse. With help from Wong and Scarlet Witch, Strange confronts various versions of himself as well as teaming up with the young America Chavez while traveling through various realities and working to restore reality as he knows it. Along the way, Strange and his allies realize they must take on a powerful new adversary who seeks to take over the multiverse.—Blazer346',
-                  ),
+                  CustomSummarySection(summary: movie.summary!),
                   const SizedBox(height: 16),
                   CustomCastSection(),
                   const SizedBox(height: 16),
-                  CustomGenresSection(),
+                  CustomGenresSection(genres: movie.genres!),
                 ],
               ),
             ),

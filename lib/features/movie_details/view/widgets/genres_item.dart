@@ -4,7 +4,9 @@ import 'package:movies/core/resources/font_manager.dart';
 import 'package:movies/core/resources/styles_manager.dart';
 
 class GenresItem extends StatelessWidget {
-  const GenresItem({super.key});
+  const GenresItem({super.key, required this.genre});
+
+  final String genre;
 
   @override
   Widget build(BuildContext context) {
@@ -15,7 +17,7 @@ class GenresItem extends StatelessWidget {
         color: ColorManager.lightBlack,
       ),
       child: Text(
-        'Action',
+        genre,
         style: getRegularStyle(
           color: ColorManager.white,
           fontSize: FontSize.s18,

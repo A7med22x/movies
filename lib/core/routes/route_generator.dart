@@ -12,7 +12,9 @@ class RouteGenerator {
       case Routes.home:
         return MaterialPageRoute(builder: (_) => const HomeScreen());
       case Routes.movieDetails:
-        return MaterialPageRoute(builder: (_) => const MovieDetailsScreen());
+        return MaterialPageRoute(
+          builder: (_) => const MovieDetailsScreen(),
+        );
       default:
         return _undefinedRoute();
     }

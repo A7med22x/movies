@@ -5,9 +5,9 @@ import 'package:movies/core/resources/styles_manager.dart';
 import 'package:movies/features/movie_details/view/widgets/genres_item.dart';
 
 class CustomGenresSection extends StatelessWidget {
-  const CustomGenresSection({super.key});
+  const CustomGenresSection({super.key, required this.genres});
 
-  //final List<String> imagesURL;
+  final List<String> genres;
 
   @override
   Widget build(BuildContext context) {
@@ -31,8 +31,8 @@ class CustomGenresSection extends StatelessWidget {
             crossAxisSpacing: 4,
             childAspectRatio: 2,
           ),
-          itemBuilder: (_, index) => GenresItem(),
-          itemCount: 5,
+          itemBuilder: (_, index) => GenresItem(genre: genres[index],),
+          itemCount: genres.length,
         ),
       ],
     );

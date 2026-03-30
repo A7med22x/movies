@@ -27,8 +27,7 @@ class CustomScreenShotsSection extends StatelessWidget {
           itemBuilder: (_, index) => ClipRRect(
             borderRadius: BorderRadius.circular(16),
             child: CachedNetworkImage(
-              imageUrl:
-                  imagesURL[index],
+              imageUrl: imagesURL[index],
               fit: BoxFit.fill,
               width: double.infinity,
             ),

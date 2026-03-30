@@ -38,7 +38,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                 onBack: onBackBottonClicked,
                 onNext: onNextBottonClicked,
                 onFinish: () {
-                  onSkipBottonClicked(context);
+                  onSkipBottonClicked;
                 },
               ),
               itemCount: OnBoardingModel.onBoardingModels.length,
@@ -50,10 +50,12 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
   }
 
   void onNextBottonClicked() {
-    if (currentIndex < OnBoardingModel.onBoardingModels.length) {
+    if (currentIndex < OnBoardingModel.onBoardingModels.length - 1) {
       currentIndex++;
       setState(() {});
       pageController.jumpToPage(currentIndex);
+    } else {
+      onSkipBottonClicked;
     }
   }
 
