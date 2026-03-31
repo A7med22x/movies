@@ -1,24 +1,29 @@
+import 'package:carousel_slider_plus/carousel_slider_plus.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:movies/core/resources/color_manager.dart';
 import 'package:movies/core/resources/new_styles_manager.dart';
 import 'package:movies/core/routes/routes.dart';
+import 'package:movies/core/widgets/custom_app_bar.dart';
 import 'package:movies/core/widgets/custom_elevated_button.dart';
 import 'package:movies/core/widgets/custom_text_field.dart';
+import 'package:movies/features/auth/view/widgets/avatar.dart';
+import 'package:movies/features/auth/view/widgets/avatar_item.dart';
 
-class LoginScreen extends StatefulWidget {
-  const LoginScreen({super.key});
+class RegisterScreen extends StatefulWidget {
+  const RegisterScreen({super.key});
 
   @override
-  State<LoginScreen> createState() => _LoginScreenState();
+  State<RegisterScreen> createState() => _RegisterScreenState();
 }
 
-class _LoginScreenState extends State<LoginScreen> {
+class _RegisterScreenState extends State<RegisterScreen> {
+  TextEditingController nameController = TextEditingController();
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
+  TextEditingController confirmPasswordController = TextEditingController();
+  TextEditingController phoneNumberController = TextEditingController();
   GlobalKey<FormState> formKey = GlobalKey<FormState>();
   String selectedLanguage = 'us';
-
   Widget _buildLanguageFlag({
     required String imagePath,
     required String languageCode,
@@ -51,11 +56,11 @@ class _LoginScreenState extends State<LoginScreen> {
             ),
     );
   }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: ColorManager.background,
+      appBar: const CustomAppBar(title: 'Register'),
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -63,18 +68,26 @@ class _LoginScreenState extends State<LoginScreen> {
             child: Form(
               key: formKey,
               child: Column(
-                crossAxisAlignment: .start,
                 children: [
-                  Center(
-                    child: SizedBox(
-                      height: MediaQuery.sizeOf(context).height * 0.25,
-                      width: MediaQuery.sizeOf(context).width * 0.5,
-                      child: Image.asset(
-                        'assets/images/logo.png',
-                        fit: BoxFit.fill,
-                      ),
+                  const SizedBox(height: 9),
+                  CarouselSlider.builder(
+                    itemCount: Avatar.avatarImages.length,
+                    itemBuilder: (_, index, _) => AvatarItem(index: index),
+                    options: CarouselOptions(
+                      height: MediaQuery.sizeOf(context).height * 0.16,
+                      viewportFraction: 0.33,
+                      enlargeCenterPage: true,
+                      enlargeFactor: 0.35,
                     ),
                   ),
+                  const SizedBox(height: 10),
+                  const Text('Avatar', style: NewStylesManager.textstyle16),
+                  const SizedBox(height: 12),
+                  CustomTextField(
+                    prefixIconImageName: 'assets/icons/name.svg',
+                    hintText: 'Name',
+                  ),
+                  const SizedBox(height: 22),
                   CustomTextField(
                     prefixIconImageName: 'assets/icons/email.svg',
                     hintText: 'Email',
@@ -85,32 +98,21 @@ class _LoginScreenState extends State<LoginScreen> {
                     prefixIconImageName: 'assets/icons/password.svg',
                     isPassword: true,
                   ),
-                  const SizedBox(height: 17),
-                  Row(
-                    mainAxisAlignment: .end,
-                    children: [
-                      TextButton(
-                        onPressed: () {
-                          Navigator.of(
-                            context,
-                          ).pushNamed(Routes.forgetPassword);
-                        },
-                        child: Text(
-                          'Forget Password ?',
-                          textAlign: TextAlign.right,
-                          style: NewStylesManager.textstyle14.copyWith(
-                            color: ColorManager.primary,
-                          ),
-                        ),
-                      ),
-                    ],
+                  const SizedBox(height: 22),
+                  CustomTextField(
+                    hintText: 'Confirm Password',
+                    prefixIconImageName: 'assets/icons/password.svg',
+                    isPassword: true,
                   ),
-                  const SizedBox(height: 10),
+                  const SizedBox(height: 22),
+                  CustomTextField(
+                    hintText: 'Phone Number',
+                    prefixIconImageName: 'assets/icons/phone.svg',
+                  ),
+                  const SizedBox(height: 20,),
                   CustomElevatedButton(
-                    label: 'Login',
-                    onTap: () {
-                      Navigator.of(context).pushReplacementNamed(Routes.home);
-                    },
+                    label: 'Create Account',
+                    onTap: () {},
                     textStyle: NewStylesManager.textstyle20,
                   ),
                   const SizedBox(height: 5),
@@ -118,60 +120,23 @@ class _LoginScreenState extends State<LoginScreen> {
                     mainAxisAlignment: .center,
                     children: [
                       Text(
-                        'Don’t Have Account ? ',
+                        'Already Have Account ? ',
                         style: NewStylesManager.textstyle14,
                       ),
                       TextButton(
                         onPressed: () {
                           Navigator.of(
                             context,
-                          ).pushReplacementNamed(Routes.register);
+                          ).pushReplacementNamed(Routes.login);
                         },
                         child: Text(
-                          'Create One',
+                          'Login',
                           style: NewStylesManager.textstyle14PrimaryBold,
                         ),
                       ),
                     ],
                   ),
-                  const SizedBox(height: 27),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 60),
-                    child: Row(
-                      children: [
-                        Expanded(
-                          child: Divider(
-                            color: ColorManager.primary,
-                            thickness: 1,
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 12),
-                          child: Text(
-                            'OR',
-                            style: TextStyle(
-                              color: ColorManager.primary,
-                              fontSize: 15,
-                            ),
-                          ),
-                        ),
-                        Expanded(
-                          child: Divider(
-                            color: ColorManager.primary,
-                            thickness: 1,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  const SizedBox(height: 28),
-                  CustomElevatedButton(
-                    label: 'Login With Google',
-                    textStyle: NewStylesManager.textstyle20,
-                    onTap: () {},
-                    prefixIcon: SvgPicture.asset('assets/icons/google.svg'),
-                  ),
-                  const SizedBox(height: 30),
+                  const SizedBox(height: 18,),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
