@@ -5,7 +5,16 @@ import 'package:movies/core/resources/font_manager.dart';
 import 'package:movies/core/resources/styles_manager.dart';
 
 class CastItem extends StatelessWidget {
-  const CastItem({super.key});
+  const CastItem({
+    super.key,
+    required this.imageURL,
+    required this.name,
+    required this.character,
+  });
+
+  final String imageURL;
+  final String name;
+  final String character;
 
   @override
   Widget build(BuildContext context) {
@@ -20,8 +29,7 @@ class CastItem extends StatelessWidget {
           ClipRRect(
             borderRadius: BorderRadius.circular(10),
             child: CachedNetworkImage(
-              imageUrl:
-                  'https://s.yimg.com/fz/api/res/1.2/g3V9YbR4g4IB.Jqdqf0P0w--~C/YXBwaWQ9c3JjaGRkO2ZpPWZpbGw7aD0xOTI7cHhvZmY9MDtweW9mZj0wO3E9ODA7dz0xOTI-/https://s.yimg.com/zb/imgv1/95fab536-8164-3900-a4a5-81bb7af78cb5/s_500x500',
+              imageUrl: imageURL,
               fit: BoxFit.fill,
               width: 70,
               height: 70,
@@ -34,14 +42,14 @@ class CastItem extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'Name : Hayley Atwell',
+                  'Name : $name',
                   style: getRegularStyle(
                     color: ColorManager.white,
                     fontSize: FontSize.s18,
                   ),
                 ),
                 Text(
-                  'Character : Wanda Maximoff / The Scarlet Witch',
+                  'Character : $character',
                   style: getRegularStyle(
                     color: ColorManager.white,
                     fontSize: FontSize.s18,

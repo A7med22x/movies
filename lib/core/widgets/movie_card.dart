@@ -7,7 +7,7 @@ import 'package:movies/core/resources/color_manager.dart';
 import 'package:movies/core/resources/font_manager.dart';
 import 'package:movies/core/resources/styles_manager.dart';
 import 'package:movies/core/routes/routes.dart';
-import 'package:movies/features/home/data/models/movie.dart';
+import 'package:movies/core/models/movie.dart';
 
 class MovieCard extends StatelessWidget {
   const MovieCard({super.key, required this.movie});
@@ -21,7 +21,7 @@ class MovieCard extends StatelessWidget {
     return InkWell(
       onTap: () => Navigator.of(
         context,
-      ).pushNamed(Routes.movieDetails, arguments: movie),
+      ).pushNamed(Routes.movieDetails, arguments: movie.id),
       child: Container(
         margin: EdgeInsets.all(6.w),
         decoration: BoxDecoration(
@@ -37,7 +37,8 @@ class MovieCard extends StatelessWidget {
                   Radius.circular(24.r),
                 ),
                 child: CachedNetworkImage(
-                  imageUrl: movie.largeCoverImage!,
+                  imageUrl:
+                      movie.largeCoverImage ?? movie.mediumCoverImage ?? movie.smallCoverImage,
                   width: double.infinity,
                   height: double.infinity,
                   fit: BoxFit.cover,

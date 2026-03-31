@@ -28,6 +28,10 @@ class CustomScreenShotsSection extends StatelessWidget {
             borderRadius: BorderRadius.circular(16),
             child: CachedNetworkImage(
               imageUrl: imagesURL[index],
+              errorWidget: (context, url, error) => Image.network(
+                'https://4ddig.tenorshare.com/images/photo-recovery/images-not-found.jpg',
+                fit: BoxFit.fill,
+              ),
               fit: BoxFit.fill,
               width: double.infinity,
             ),

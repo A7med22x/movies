@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:movies/core/widgets/movie_card.dart';
 import 'package:movies/features/browse/view/widgets/tab_item.dart';
 
 class BrowseTab extends StatefulWidget {

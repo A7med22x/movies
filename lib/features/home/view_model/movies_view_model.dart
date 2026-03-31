@@ -8,6 +8,7 @@ class MoviesViewModel extends Cubit<MoviesState> {
   final MoviesRepository _repository;
 
   MoviesViewModel(this._repository) : super(MoviesInitial());
+  int currentIndex = 0;
 
   Future<void> getMovies({
     String? genres,

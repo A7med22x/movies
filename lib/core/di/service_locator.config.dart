@@ -21,6 +21,14 @@ import 'package:movies/features/home/data/repositories/movies_repository.dart'
     as _i194;
 import 'package:movies/features/home/view_model/movies_view_model.dart'
     as _i164;
+import 'package:movies/features/movie_details/data/data_sources/remote/movie_details_api_remote_data_source.dart'
+    as _i816;
+import 'package:movies/features/movie_details/data/data_sources/remote/movie_details_remote_data_source.dart'
+    as _i149;
+import 'package:movies/features/movie_details/data/repositories/movie_details_repository.dart'
+    as _i129;
+import 'package:movies/features/movie_details/view_model/movie_details_view_model.dart'
+    as _i92;
 import 'package:shared_preferences/shared_preferences.dart' as _i460;
 
 extension GetItInjectableX on _i174.GetIt {
@@ -39,11 +47,22 @@ extension GetItInjectableX on _i174.GetIt {
     gh.lazySingleton<_i696.MoviesRemoteDataSource>(
       () => _i398.MoviesApiRemoteDataSource(gh<_i361.Dio>()),
     );
+    gh.lazySingleton<_i149.MovieDetailsRemoteDataSource>(
+      () => _i816.MovieDetailsAPIRemoteDataSource(gh<_i361.Dio>()),
+    );
+    gh.lazySingleton<_i129.MovieDetailsRepository>(
+      () => _i129.MovieDetailsRepository(
+        gh<_i149.MovieDetailsRemoteDataSource>(),
+      ),
+    );
     gh.lazySingleton<_i194.MoviesRepository>(
       () => _i194.MoviesRepository(gh<_i696.MoviesRemoteDataSource>()),
     );
     gh.factory<_i164.MoviesViewModel>(
       () => _i164.MoviesViewModel(gh<_i194.MoviesRepository>()),
+    );
+    gh.factory<_i92.MovieDetailsViewModel>(
+      () => _i92.MovieDetailsViewModel(gh<_i129.MovieDetailsRepository>()),
     );
     return this;
   }

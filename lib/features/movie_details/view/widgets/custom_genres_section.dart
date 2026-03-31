@@ -31,7 +31,7 @@ class CustomGenresSection extends StatelessWidget {
             crossAxisSpacing: 4,
             childAspectRatio: 2,
           ),
-          itemBuilder: (_, index) => GenresItem(genre: genres[index],),
+          itemBuilder: (_, index) => GenresItem(genre: genres[index]),
           itemCount: genres.length,
         ),
       ],

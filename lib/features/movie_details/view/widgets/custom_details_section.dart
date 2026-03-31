@@ -5,16 +5,19 @@ import 'package:movies/core/resources/color_manager.dart';
 import 'package:movies/core/resources/font_manager.dart';
 import 'package:movies/core/resources/styles_manager.dart';
 import 'package:movies/core/widgets/custom_elevated_button.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class CustomDetailsSection extends StatelessWidget {
   const CustomDetailsSection({
     super.key,
     required this.year,
     required this.title,
+    required this.movieURL,
   });
 
   final String year;
   final String title;
+  final String movieURL;
 
   @override
   Widget build(BuildContext context) {
@@ -40,11 +43,16 @@ class CustomDetailsSection extends StatelessWidget {
           ],
         ),
         const Spacer(),
-        Image.asset(
-          ImageAssets.watch,
-          width: 100,
-          height: 100,
-          fit: BoxFit.fill,
+        InkWell(
+          onTap: () {
+            watchNow(movieURL);
+          },
+          child: Image.asset(
+            ImageAssets.watch,
+            width: 100,
+            height: 100,
+            fit: BoxFit.fill,
+          ),
         ),
         const Spacer(),
         Padding(
@@ -75,11 +83,23 @@ class CustomDetailsSection extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: 16),
           child: CustomElevatedButton(
             label: 'Watch',
-            onTap: () {},
+            onTap: () {
+              watchNow(movieURL);
+            },
             backgroundColor: ColorManager.error,
           ),
         ),
       ],
     );
+  }
+
+  
+
+  Future<void> watchNow(String url) async {
+    final Uri uri = Uri.parse(url);
+
+    if (!await launchUrl(uri, mode: LaunchMode.inAppWebView)) {
+      throw Exception('Could not launch $url');
+    }
   }
 }
