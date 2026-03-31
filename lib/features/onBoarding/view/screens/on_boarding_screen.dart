@@ -38,7 +38,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                 onBack: onBackBottonClicked,
                 onNext: onNextBottonClicked,
                 onFinish: () {
-                  onSkipBottonClicked(context);
+                  onSkipBottonClicked;
                 },
               ),
               itemCount: OnBoardingModel.onBoardingModels.length,

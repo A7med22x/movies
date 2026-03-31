@@ -56,20 +56,20 @@ class _BrowseTabState extends State<BrowseTab> {
           ),
         ),
         const SizedBox(height: 24),
-        GridView.builder(
-          padding: const EdgeInsets.symmetric(horizontal: 16),
-          scrollDirection: Axis.vertical,
-          shrinkWrap: true,
-          physics: const NeverScrollableScrollPhysics(),
-          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 2,
-            mainAxisSpacing: 4,
-            crossAxisSpacing: 4,
-            childAspectRatio: 0.7,
-          ),
-          itemBuilder: (_, index) => MovieCard(),
-          itemCount: 50,
-        ),
+        // GridView.builder(
+        //   padding: const EdgeInsets.symmetric(horizontal: 16),
+        //   scrollDirection: Axis.vertical,
+        //   shrinkWrap: true,
+        //   physics: const NeverScrollableScrollPhysics(),
+        //   gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+        //     crossAxisCount: 2,
+        //     mainAxisSpacing: 4,
+        //     crossAxisSpacing: 4,
+        //     childAspectRatio: 0.7,
+        //   ),
+        //   itemBuilder: (_, index) => MovieCard(),
+        //   itemCount: 50,
+        // ),
       ],
     );
   }

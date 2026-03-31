@@ -7,18 +7,21 @@ import 'package:movies/core/resources/color_manager.dart';
 import 'package:movies/core/resources/font_manager.dart';
 import 'package:movies/core/resources/styles_manager.dart';
 import 'package:movies/core/routes/routes.dart';
+import 'package:movies/features/home/data/models/movie.dart';
 
 class MovieCard extends StatelessWidget {
-  const MovieCard({super.key});
+  const MovieCard({super.key, required this.movie});
+
+  final Movie movie;
 
   @override
   Widget build(BuildContext context) {
     final double height = MediaQuery.sizeOf(context).height;
     final double width = MediaQuery.sizeOf(context).width;
     return InkWell(
-      onTap: () {
-        Navigator.of(context).pushNamed(Routes.movieDetails);
-      },
+      onTap: () => Navigator.of(
+        context,
+      ).pushNamed(Routes.movieDetails, arguments: movie),
       child: Container(
         margin: EdgeInsets.all(6.w),
         decoration: BoxDecoration(
@@ -34,8 +37,7 @@ class MovieCard extends StatelessWidget {
                   Radius.circular(24.r),
                 ),
                 child: CachedNetworkImage(
-                  imageUrl:
-                      'https://tse1.mm.bing.net/th/id/OIP.xRMA0d0BJ4C_gg5UVSdg6gHaLH?pid=Api&h=220&P=0',
+                  imageUrl: movie.largeCoverImage!,
                   width: double.infinity,
                   height: double.infinity,
                   fit: BoxFit.cover,
@@ -54,7 +56,7 @@ class MovieCard extends StatelessWidget {
                 child: Row(
                   children: [
                     Text(
-                      '7.7',
+                      '${movie.rating}',
                       style: getRegularStyle(
                         color: ColorManager.white,
                         fontSize: FontSize.s16,
