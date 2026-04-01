@@ -13,18 +13,21 @@ class MoviesApiRemoteDataSource implements MoviesRemoteDataSource {
 
   @override
   Future<MoviesResponse> getMovies({
+    String? query,
     String? genres,
     String? sortBy,
     int? minimumRating,
-    int page = 1,
-    int limit = 20,
+    required int page,
   }) async {
     try {
       final queryParams = <String, dynamic>{
-        'page_number': page,
-        'limit': limit,
+        'page': page,
+        'limit': 20,
       };
 
+      if (query != null) {
+        queryParams['query_term'] = query;
+      }
       if (genres != null) {
         queryParams['genre'] = genres;
       }

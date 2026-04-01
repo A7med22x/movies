@@ -20,6 +20,7 @@ class IconsAssets {
   static const String _iconsPath = 'assets/icons';
   static const String home = '$_iconsPath/home.svg';
   static const String search = '$_iconsPath/search.svg';
+  static const String delete = '$_iconsPath/delete.svg';
   static const String browse = '$_iconsPath/browse.svg';
   static const String profile = '$_iconsPath/Profile.svg';
   static const String time = '$_iconsPath/time.svg';

@@ -9,12 +9,16 @@ class CustomTextField extends StatefulWidget {
   final String? prefixIconImageName;
   final String? suffixIconImageName;
   final void Function(String)? onChanged;
+  final void Function(String)? onFieldSubmitted;
   final void Function()? onEditingComplete;
+  final void Function()? onprefixIconTab;
+  final void Function()? onsuffixIconTab;
   final String? Function(String?)? validator;
   final TextEditingController? controller;
   final bool isPassword;
   final int maxLines;
   final bool readOnly;
+  final bool isSearch;
 
   const CustomTextField({
     super.key,
@@ -23,11 +27,15 @@ class CustomTextField extends StatefulWidget {
     this.suffixIconImageName,
     this.controller,
     this.onEditingComplete,
+    this.onprefixIconTab,
+    this.onsuffixIconTab,
     this.onChanged,
+    this.onFieldSubmitted,
     this.validator,
     this.isPassword = false,
     this.maxLines = 1,
     this.readOnly = false,
+    this.isSearch = false,
   });
 
   @override
@@ -48,13 +56,16 @@ class _CustomTextFieldState extends State<CustomTextField> {
         ),
         prefixIcon: widget.prefixIconImageName == null
             ? null
-            : Padding(
-                padding: const EdgeInsets.all(12),
-                child: SvgPicture.asset(
-                  widget.prefixIconImageName!,
-                  colorFilter: ColorFilter.mode(
-                    ColorManager.white,
-                    BlendMode.srcIn,
+            : InkWell(
+                onTap: widget.isSearch ? widget.onprefixIconTab : () {},
+                child: Padding(
+                  padding: const EdgeInsets.all(12),
+                  child: SvgPicture.asset(
+                    widget.prefixIconImageName!,
+                    colorFilter: ColorFilter.mode(
+                      ColorManager.white,
+                      BlendMode.srcIn,
+                    ),
                   ),
                 ),
               ),
@@ -73,13 +84,16 @@ class _CustomTextFieldState extends State<CustomTextField> {
               )
             : widget.suffixIconImageName == null
             ? null
-            : Padding(
-                padding: const EdgeInsets.all(12),
-                child: SvgPicture.asset(
-                  widget.suffixIconImageName!,
-                  colorFilter: ColorFilter.mode(
-                    ColorManager.white,
-                    BlendMode.srcIn,
+            : InkWell(
+                onTap: widget.isSearch ? widget.onsuffixIconTab : () {},
+                child: Padding(
+                  padding: const EdgeInsets.all(12),
+                  child: SvgPicture.asset(
+                    widget.suffixIconImageName!,
+                    colorFilter: ColorFilter.mode(
+                      ColorManager.white,
+                      BlendMode.srcIn,
+                    ),
                   ),
                 ),
               ),
@@ -104,6 +118,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
       ),
       onEditingComplete: widget.onEditingComplete,
       onChanged: widget.onChanged,
+      onFieldSubmitted: widget.onFieldSubmitted,
       controller: widget.controller,
       validator: widget.validator,
       obscureText: isObscure,

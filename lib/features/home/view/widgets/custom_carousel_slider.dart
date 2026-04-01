@@ -26,7 +26,7 @@ class _CustomCarouselSliderState extends State<CustomCarouselSlider> {
     return BlocProvider(
       create: (_) =>
           serviceLocator.get<MoviesViewModel>()
-            ..getMovies(sortBy: 'year', minimumRating: 9),
+            ..getMovies(page: 1, sortBy: 'year', minimumRating: 9),
       child: BlocBuilder<MoviesViewModel, MoviesState>(
         builder: (context, state) {
           if (state is GetMoviesLoading) {

@@ -7,9 +7,10 @@ class MoviesInitial extends MoviesState {}
 class GetMoviesLoading extends MoviesState {}
 
 class GetMoviesSuccess extends MoviesState {
-  List<Movie> movies;
+  final List<Movie> movies;
+  final int movieCount;
 
-  GetMoviesSuccess(this.movies);
+  GetMoviesSuccess(this.movies, this.movieCount);
 }
 
 class GetMoviesError extends MoviesState {
@@ -17,3 +18,5 @@ class GetMoviesError extends MoviesState {
 
   GetMoviesError(this.errorMessage);
 }
+
+class MoviesCleared extends MoviesState {}
