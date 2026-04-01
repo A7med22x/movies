@@ -59,18 +59,18 @@ class CustomSectionBar extends StatelessWidget {
           const SizedBox(height: 8),
           BlocProvider(
             create: (_) => serviceLocator.get<MoviesViewModel>()
-              ..getMovies(
+              ..getGenersMovies(
                 page: 1,
-                genres: sectionName == 'All' ? null : sectionName,
+                genres: sectionName == 'All' ? '' : sectionName,
                 sortBy: 'year',
               ),
             child: BlocBuilder<MoviesViewModel, MoviesState>(
               builder: (context, state) {
-                if (state is GetMoviesLoading) {
+                if (state is GetGenersLoading) {
                   return const LoadingIndicator();
-                } else if (state is GetMoviesError) {
-                  return ErrorIndicator(state.errorMessage);
-                } else if (state is GetMoviesSuccess) {
+                } else if (state is GetGenersError) {
+                  return ErrorIndicator(state.message);
+                } else if (state is GetGenersSuccess) {
                   final movies = state.movies;
                   return SizedBox(
                     height: MediaQuery.sizeOf(context).height * 0.3,

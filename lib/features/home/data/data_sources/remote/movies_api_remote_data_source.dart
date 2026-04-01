@@ -12,29 +12,45 @@ class MoviesApiRemoteDataSource implements MoviesRemoteDataSource {
   const MoviesApiRemoteDataSource(this._dio);
 
   @override
-  Future<MoviesResponse> getMovies({
-    String? query,
-    String? genres,
-    String? sortBy,
-    int? minimumRating,
+  Future<MoviesResponse> getCarouselMovies({
+    required String sortBy,
+    required int minimumRating,
     required int page,
   }) async {
     try {
       final queryParams = <String, dynamic>{
         'page': page,
         'limit': 20,
+        'sort_by': sortBy,
+        'minimum_rating': minimumRating,
       };
 
-      if (query != null) {
-        queryParams['query_term'] = query;
+      final response = await _dio.get(
+        APIConstants.moviesEndpoint,
+        queryParameters: queryParams,
+      );
+      return MoviesResponse.fromJson(response.data);
+    } catch (exception) {
+      String? message;
+      if (exception is DioException) {
+        message = exception.response?.data['message'];
       }
-      if (genres != null) {
-        queryParams['genre'] = genres;
-      }
+      throw RemoteException(message ?? 'Failed to get movies');
+    }
+  }
 
-      if (minimumRating != null) {
-        queryParams['minimum_rating'] = minimumRating;
-      }
+  @override
+  Future<MoviesResponse> getGenersMovies({
+    required String genres,
+    String? sortBy,
+    required int page,
+  }) async{
+    try {
+      final queryParams = <String, dynamic>{
+        'page': page,
+        'limit': 20,
+        'genre': genres,
+      };
 
       if (sortBy != null) {
         queryParams['sort_by'] = sortBy;
@@ -42,7 +58,33 @@ class MoviesApiRemoteDataSource implements MoviesRemoteDataSource {
 
       final response = await _dio.get(
         APIConstants.moviesEndpoint,
-        queryParameters: queryParams.isEmpty ? null : queryParams,
+        queryParameters: queryParams,
+      );
+      return MoviesResponse.fromJson(response.data);
+    } catch (exception) {
+      String? message;
+      if (exception is DioException) {
+        message = exception.response?.data['message'];
+      }
+      throw RemoteException(message ?? 'Failed to get movies');
+    }
+  }
+
+  @override
+  Future<MoviesResponse> getSearchMovies({
+    required String query,
+    required int page,
+  }) async{
+    try {
+      final queryParams = <String, dynamic>{
+        'page': page,
+        'limit': 20,
+        'query_term': query,
+      };
+
+      final response = await _dio.get(
+        APIConstants.moviesEndpoint,
+        queryParameters: queryParams,
       );
       return MoviesResponse.fromJson(response.data);
     } catch (exception) {

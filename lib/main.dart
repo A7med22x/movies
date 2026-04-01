@@ -6,6 +6,7 @@ import 'package:movies/core/app_bloc_observer.dart';
 import 'package:movies/core/di/service_locator.dart';
 import 'package:movies/core/routes/route_generator.dart';
 import 'package:movies/core/routes/routes.dart';
+import 'package:movies/features/home/view_model/movies_view_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 Future<void> main() async {
@@ -14,7 +15,10 @@ Future<void> main() async {
   await configureDependencies();
   SharedPreferences preferences = await SharedPreferences.getInstance();
   final hasSeenIntro = preferences.getBool('hasSeenIntro') ?? false;
-  runApp(MoviesApp(hasSeenIntro: hasSeenIntro));
+  runApp(MultiBlocProvider(providers: [BlocProvider(
+          create: (context) => serviceLocator<MoviesViewModel>(),
+        ),],
+  child: MoviesApp(hasSeenIntro: hasSeenIntro)));
 }
 
 class MoviesApp extends StatelessWidget {

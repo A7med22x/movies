@@ -38,7 +38,12 @@ class MovieCard extends StatelessWidget {
                 ),
                 child: CachedNetworkImage(
                   imageUrl:
-                      movie.largeCoverImage ?? movie.mediumCoverImage ?? movie.smallCoverImage,
+                      movie.largeCoverImage ??
+                      movie.mediumCoverImage ??
+                      movie.smallCoverImage,
+                  errorWidget: (context, url, error) => Image.network(
+                    'https://4ddig.tenorshare.com/images/photo-recovery/images-not-found.jpg',
+                  ),
                   width: double.infinity,
                   height: double.infinity,
                   fit: BoxFit.cover,

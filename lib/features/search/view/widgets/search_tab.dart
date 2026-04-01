@@ -42,14 +42,17 @@ class _SearchTabState extends State<SearchTab> {
     currentPage = 1;
     isLoadingMore = false;
     searchMovies.clear();
-    context.read<MoviesViewModel>().getMovies(page: currentPage, query: query);
+    context.read<MoviesViewModel>().getSearchMovies(
+      page: currentPage,
+      query: query,
+    );
   }
 
   void loadMoreMovies() async {
     if (isLoadingMore) return;
     isLoadingMore = true;
     currentPage++;
-    await context.read<MoviesViewModel>().getMovies(
+    await context.read<MoviesViewModel>().getSearchMovies(
       query: _searchController.text,
       page: currentPage,
     );
@@ -59,15 +62,13 @@ class _SearchTabState extends State<SearchTab> {
   Widget build(BuildContext context) {
     return BlocBuilder<MoviesViewModel, MoviesState>(
       builder: (context, state) {
-        if (state is GetMoviesSuccess) {
+        if (state is GetSearchMoviesSuccess) {
           totalMovies = state.movieCount;
           if (!isLoadingMore) {
             searchMovies = state.movies;
           } else {
             searchMovies.addAll(
-              state.movies.where(
-                (m) => !searchMovies.any((e) => e.id == m.id),
-              ),
+              state.movies.where((m) => !searchMovies.any((e) => e.id == m.id)),
             );
           }
           isLoadingMore = false;
@@ -102,9 +103,9 @@ class _SearchTabState extends State<SearchTab> {
                     currentPage = 1;
                     isLoadingMore = false;
                   }
-                  if (state is GetMoviesLoading && searchMovies.isEmpty) {
+                  if (state is GetSearchMoviesLoading && searchMovies.isEmpty) {
                     return const LoadingIndicator();
-                  } else if (state is GetMoviesError) {
+                  } else if (state is GetSearchMoviesError) {
                     return ErrorIndicator(state.errorMessage);
                   } else if (searchMovies.isEmpty) {
                     return Center(
@@ -138,8 +139,7 @@ class _SearchTabState extends State<SearchTab> {
                           );
                         }
                       },
-                      itemCount:
-                          searchMovies.length + (isLoadingMore ? 1 : 0),
+                      itemCount: searchMovies.length + (isLoadingMore ? 1 : 0),
                     );
                   }
                 },
