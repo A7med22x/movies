@@ -3,6 +3,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:movies/core/resources/color_manager.dart';
 import 'package:movies/core/resources/new_styles_manager.dart';
 import 'package:movies/core/routes/routes.dart';
+import 'package:movies/core/utils/validator.dart';
 import 'package:movies/core/widgets/custom_elevated_button.dart';
 import 'package:movies/core/widgets/custom_text_field.dart';
 
@@ -78,12 +79,20 @@ class _LoginScreenState extends State<LoginScreen> {
                   CustomTextField(
                     prefixIconImageName: 'assets/icons/email.svg',
                     hintText: 'Email',
+                    controller: emailController,
+                    validator: Validator.validateEmail,
+
+                    //textInputType: TextInputType.emailAddress,
                   ),
                   const SizedBox(height: 22),
                   CustomTextField(
+                  
                     hintText: 'Password',
                     prefixIconImageName: 'assets/icons/password.svg',
                     isPassword: true,
+                    controller: passwordController,
+                    validator: Validator.validatePassword,
+                    
                   ),
                   const SizedBox(height: 17),
                   Row(
@@ -109,7 +118,10 @@ class _LoginScreenState extends State<LoginScreen> {
                   CustomElevatedButton(
                     label: 'Login',
                     onTap: () {
-                      Navigator.of(context).pushReplacementNamed(Routes.home);
+                      if (formKey.currentState!.validate()) {
+                       Navigator.of(context).pushReplacementNamed(Routes.home); 
+                      }
+                      
                     },
                     textStyle: NewStylesManager.textstyle20,
                   ),

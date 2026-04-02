@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:movies/core/resources/color_manager.dart';
 import 'package:movies/core/resources/new_styles_manager.dart';
 import 'package:movies/core/routes/routes.dart';
+import 'package:movies/core/utils/validator.dart';
 import 'package:movies/core/widgets/custom_app_bar.dart';
 import 'package:movies/core/widgets/custom_elevated_button.dart';
 import 'package:movies/core/widgets/custom_text_field.dart';
@@ -86,33 +87,51 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   CustomTextField(
                     prefixIconImageName: 'assets/icons/name.svg',
                     hintText: 'Name',
+                    controller: nameController,
+                    validator: Validator.validateFullName,
                   ),
                   const SizedBox(height: 22),
                   CustomTextField(
                     prefixIconImageName: 'assets/icons/email.svg',
                     hintText: 'Email',
+                    controller: emailController,
+                    validator: Validator.validateEmail,
                   ),
                   const SizedBox(height: 22),
                   CustomTextField(
                     hintText: 'Password',
                     prefixIconImageName: 'assets/icons/password.svg',
                     isPassword: true,
+                    controller: passwordController,
+                    validator: Validator.validatePassword,
                   ),
                   const SizedBox(height: 22),
                   CustomTextField(
                     hintText: 'Confirm Password',
                     prefixIconImageName: 'assets/icons/password.svg',
                     isPassword: true,
+                    controller: confirmPasswordController,
+                    validator: (value) => Validator.validateConfirmPassword(
+                      value,
+                      passwordController.text,
+                    ),
                   ),
                   const SizedBox(height: 22),
                   CustomTextField(
                     hintText: 'Phone Number',
                     prefixIconImageName: 'assets/icons/phone.svg',
+                    controller: phoneNumberController,
+                    validator: Validator.validatePhoneNumber,
                   ),
                   const SizedBox(height: 20,),
                   CustomElevatedButton(
                     label: 'Create Account',
-                    onTap: () {},
+                    onTap: () {
+                      if (formKey.currentState!.validate()) {
+                       Navigator.of(context).pushReplacementNamed(Routes.login); 
+                      }
+                      
+                    },
                     textStyle: NewStylesManager.textstyle20,
                   ),
                   const SizedBox(height: 5),

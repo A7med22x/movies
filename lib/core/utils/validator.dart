@@ -30,7 +30,7 @@ class Validator {
     if (val == null || val.isEmpty) {
       return 'this field is required';
     } else if (val != password) {
-      return 'same password';
+      return "Password doesn't match";
     } else {
       return null;
     }

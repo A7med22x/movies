@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -11,14 +12,19 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
   Bloc.observer = AppBlocObserver();
   await configureDependencies();
   SharedPreferences preferences = await SharedPreferences.getInstance();
   final hasSeenIntro = preferences.getBool('hasSeenIntro') ?? false;
-  runApp(MultiBlocProvider(providers: [BlocProvider(
-          create: (context) => serviceLocator<MoviesViewModel>(),
-        ),],
-  child: MoviesApp(hasSeenIntro: hasSeenIntro)));
+  runApp(
+    MultiBlocProvider(
+      providers: [
+        BlocProvider(create: (context) => serviceLocator<MoviesViewModel>()),
+      ],
+      child: MoviesApp(hasSeenIntro: hasSeenIntro),
+    ),
+  );
 }
 
 class MoviesApp extends StatelessWidget {
@@ -35,7 +41,8 @@ class MoviesApp extends StatelessWidget {
       builder: (_, _) => MaterialApp(
         debugShowCheckedModeBanner: false,
         onGenerateRoute: RouteGenerator.getRoute,
-        initialRoute: hasSeenIntro ? Routes.home : Routes.onBoarding,
+        initialRoute: Routes.login,
+        //initialRoute: hasSeenIntro ? Routes.home : Routes.onBoarding,
       ),
     );
   }
