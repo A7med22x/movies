@@ -6,6 +6,7 @@ import 'package:movies/core/routes/routes.dart';
 import 'package:movies/core/utils/validator.dart';
 import 'package:movies/core/widgets/custom_elevated_button.dart';
 import 'package:movies/core/widgets/custom_text_field.dart';
+import 'package:movies/core/widgets/firebase_services.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -86,13 +87,11 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                   const SizedBox(height: 22),
                   CustomTextField(
-                  
                     hintText: 'Password',
                     prefixIconImageName: 'assets/icons/password.svg',
                     isPassword: true,
                     controller: passwordController,
                     validator: Validator.validatePassword,
-                    
                   ),
                   const SizedBox(height: 17),
                   Row(
@@ -117,12 +116,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   const SizedBox(height: 10),
                   CustomElevatedButton(
                     label: 'Login',
-                    onTap: () {
-                      if (formKey.currentState!.validate()) {
-                       Navigator.of(context).pushReplacementNamed(Routes.home); 
-                      }
-                      
-                    },
+                    onTap: login,
                     textStyle: NewStylesManager.textstyle20,
                   ),
                   const SizedBox(height: 5),
@@ -220,5 +214,16 @@ class _LoginScreenState extends State<LoginScreen> {
         ),
       ),
     );
+  }
+
+  void login() {
+    if (formKey.currentState!.validate()) {
+      FirebaseServices.login(
+        email: emailController.text,
+        password: passwordController.text,
+      ).then((user) {
+        Navigator.of(context).pushReplacementNamed(Routes.home);
+      });
+    }
   }
 }

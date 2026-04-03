@@ -7,6 +7,8 @@ import 'package:movies/core/utils/validator.dart';
 import 'package:movies/core/widgets/custom_app_bar.dart';
 import 'package:movies/core/widgets/custom_elevated_button.dart';
 import 'package:movies/core/widgets/custom_text_field.dart';
+import 'package:movies/core/widgets/firebase_services.dart';
+import 'package:movies/features/auth/data/models/user_model.dart';
 import 'package:movies/features/auth/view/widgets/avatar.dart';
 import 'package:movies/features/auth/view/widgets/avatar_item.dart';
 
@@ -57,6 +59,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
             ),
     );
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -123,15 +126,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     controller: phoneNumberController,
                     validator: Validator.validatePhoneNumber,
                   ),
-                  const SizedBox(height: 20,),
+                  const SizedBox(height: 20),
                   CustomElevatedButton(
                     label: 'Create Account',
-                    onTap: () {
-                      if (formKey.currentState!.validate()) {
-                       Navigator.of(context).pushReplacementNamed(Routes.login); 
-                      }
-                      
-                    },
+                    onTap: register,
                     textStyle: NewStylesManager.textstyle20,
                   ),
                   const SizedBox(height: 5),
@@ -155,7 +153,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       ),
                     ],
                   ),
-                  const SizedBox(height: 18,),
+                  const SizedBox(height: 18),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
@@ -192,5 +190,20 @@ class _RegisterScreenState extends State<RegisterScreen> {
         ),
       ),
     );
+  }
+
+  void register() {
+    if (formKey.currentState!.validate()) {
+      FirebaseServices.register(
+        name: nameController.text,
+        email: emailController.text,
+        password: passwordController.text,
+        confirmPassword: confirmPasswordController.text,
+        phoneNumber: phoneNumberController.text,
+      ).then((user){
+        Navigator.of(context).pushReplacementNamed(Routes.login);
+      });
+      
+    }
   }
 }
