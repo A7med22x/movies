@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:movies/core/app_bloc_observer.dart';
 import 'package:movies/core/di/service_locator.dart';
@@ -17,6 +18,7 @@ Future<void> main() async {
   await configureDependencies();
   SharedPreferences preferences = await SharedPreferences.getInstance();
   final hasSeenIntro = preferences.getBool('hasSeenIntro') ?? false;
+  await dotenv.load(fileName: ".env");
   runApp(
     MultiBlocProvider(
       providers: [

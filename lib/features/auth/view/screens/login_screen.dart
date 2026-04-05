@@ -174,7 +174,10 @@ class _LoginScreenState extends State<LoginScreen> {
                   CustomElevatedButton(
                     label: 'Login With Google',
                     textStyle: NewStylesManager.textstyle20,
-                    onTap: () {},
+                    onTap: () {
+                      FirebaseServices.loginWithGoogle(context);
+                      
+                    },
                     prefixIcon: SvgPicture.asset('assets/icons/google.svg'),
                   ),
                   const SizedBox(height: 30),

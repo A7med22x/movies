@@ -25,6 +25,8 @@ dependencies:
   firebase_core: ^4.6.0
   firebase_auth: ^6.3.0
   cloud_firestore: ^6.2.0
+  google_sign_in: ^7.2.0
+  flutter_dotenv: ^6.0.0
   
 
 dev_dependencies:
@@ -42,6 +44,7 @@ flutter:
   assets:
     - assets/images/
     - assets/icons/
+    - .env
 
   # fonts:
   #   - family: Schyler
