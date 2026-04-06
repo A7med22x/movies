@@ -63,161 +63,149 @@ class _RegisterScreenState extends State<RegisterScreen> {
     );
   }
 
-  final AuthViewModel authViewModel = serviceLocator<AuthViewModel>();
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (_) => authViewModel,
-      child: BlocConsumer<AuthViewModel, AuthState>(
-        listener: (context, state) {
-          if (state is RegisterSuccess) {
-            UIUtils.showSuccessMessage('Account created! Please log in.');
-            Navigator.of(context).pushReplacementNamed(Routes.login);
-          } else if (state is RegisterError) {
-            UIUtils.showErrorMessage(state.message);
-          }
-        },
-        builder: (context, state) {
-          if (state is RegisterLoading) {
-            return const Scaffold(
-              body: Center(child: CircularProgressIndicator()),
-            );
-          }
+    return BlocListener<AuthViewModel, AuthState>(
+      listener: (context, state) {
+        if (state is RegisterLoading) {
+          return UIUtils.showLoading(context);
+        } else if (state is RegisterSuccess) {
+          UIUtils.hideLoading(context);
+          UIUtils.showSuccessMessage('Account created! Please log in.');
+          Navigator.of(context).pushReplacementNamed(Routes.login);
+        } else if (state is RegisterError) {
+          UIUtils.hideLoading(context);
+          UIUtils.showErrorMessage(state.message);
+        }
+      },
 
-          return Scaffold(
-            backgroundColor: ColorManager.background,
-            appBar: const CustomAppBar(title: 'Register'),
-            body: SafeArea(
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16),
-                child: SingleChildScrollView(
-                  child: Form(
-                    key: formKey,
-                    child: Column(
+      child: Scaffold(
+        backgroundColor: ColorManager.background,
+        appBar: const CustomAppBar(title: 'Register'),
+        body: SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: SingleChildScrollView(
+              child: Form(
+                key: formKey,
+                child: Column(
+                  children: [
+                    const SizedBox(height: 9),
+                    CarouselSlider.builder(
+                      itemCount: Avatar.avatarImages.length,
+                      itemBuilder: (_, index, _) => AvatarItem(index: index),
+                      options: CarouselOptions(
+                        height: MediaQuery.sizeOf(context).height * 0.16,
+                        viewportFraction: 0.33,
+                        enlargeCenterPage: true,
+                        enlargeFactor: 0.35,
+                      ),
+                    ),
+                    const SizedBox(height: 10),
+                    const Text('Avatar', style: NewStylesManager.textstyle16),
+                    const SizedBox(height: 12),
+                    CustomTextField(
+                      prefixIconImageName: 'assets/icons/name.svg',
+                      hintText: 'Name',
+                      controller: nameController,
+                      validator: Validator.validateFullName,
+                    ),
+                    const SizedBox(height: 22),
+                    CustomTextField(
+                      prefixIconImageName: 'assets/icons/email.svg',
+                      hintText: 'Email',
+                      controller: emailController,
+                      validator: Validator.validateEmail,
+                    ),
+                    const SizedBox(height: 22),
+                    CustomTextField(
+                      hintText: 'Password',
+                      prefixIconImageName: 'assets/icons/password.svg',
+                      isPassword: true,
+                      controller: passwordController,
+                      validator: Validator.validatePassword,
+                    ),
+                    const SizedBox(height: 22),
+                    CustomTextField(
+                      hintText: 'Confirm Password',
+                      prefixIconImageName: 'assets/icons/password.svg',
+                      isPassword: true,
+                      controller: confirmPasswordController,
+                      validator: (value) => Validator.validateConfirmPassword(
+                        value,
+                        passwordController.text,
+                      ),
+                    ),
+                    const SizedBox(height: 22),
+                    CustomTextField(
+                      hintText: 'Phone Number',
+                      prefixIconImageName: 'assets/icons/phone.svg',
+                      controller: phoneNumberController,
+                      validator: Validator.validatePhoneNumber,
+                    ),
+                    const SizedBox(height: 20),
+                    CustomElevatedButton(
+                      label: 'Create Account',
+                      onTap: register,
+                      textStyle: NewStylesManager.textstyle20,
+                    ),
+                    const SizedBox(height: 5),
+                    Row(
+                      mainAxisAlignment: .center,
                       children: [
-                        const SizedBox(height: 9),
-                        CarouselSlider.builder(
-                          itemCount: Avatar.avatarImages.length,
-                          itemBuilder: (_, index, _) =>
-                              AvatarItem(index: index),
-                          options: CarouselOptions(
-                            height: MediaQuery.sizeOf(context).height * 0.16,
-                            viewportFraction: 0.33,
-                            enlargeCenterPage: true,
-                            enlargeFactor: 0.35,
+                        Text(
+                          'Already Have Account ? ',
+                          style: NewStylesManager.textstyle14,
+                        ),
+                        TextButton(
+                          onPressed: () {
+                            Navigator.of(
+                              context,
+                            ).pushReplacementNamed(Routes.login);
+                          },
+                          child: Text(
+                            'Login',
+                            style: NewStylesManager.textstyle14PrimaryBold,
                           ),
-                        ),
-                        const SizedBox(height: 10),
-                        const Text(
-                          'Avatar',
-                          style: NewStylesManager.textstyle16,
-                        ),
-                        const SizedBox(height: 12),
-                        CustomTextField(
-                          prefixIconImageName: 'assets/icons/name.svg',
-                          hintText: 'Name',
-                          controller: nameController,
-                          validator: Validator.validateFullName,
-                        ),
-                        const SizedBox(height: 22),
-                        CustomTextField(
-                          prefixIconImageName: 'assets/icons/email.svg',
-                          hintText: 'Email',
-                          controller: emailController,
-                          validator: Validator.validateEmail,
-                        ),
-                        const SizedBox(height: 22),
-                        CustomTextField(
-                          hintText: 'Password',
-                          prefixIconImageName: 'assets/icons/password.svg',
-                          isPassword: true,
-                          controller: passwordController,
-                          validator: Validator.validatePassword,
-                        ),
-                        const SizedBox(height: 22),
-                        CustomTextField(
-                          hintText: 'Confirm Password',
-                          prefixIconImageName: 'assets/icons/password.svg',
-                          isPassword: true,
-                          controller: confirmPasswordController,
-                          validator: (value) =>
-                              Validator.validateConfirmPassword(
-                                value,
-                                passwordController.text,
-                              ),
-                        ),
-                        const SizedBox(height: 22),
-                        CustomTextField(
-                          hintText: 'Phone Number',
-                          prefixIconImageName: 'assets/icons/phone.svg',
-                          controller: phoneNumberController,
-                          validator: Validator.validatePhoneNumber,
-                        ),
-                        const SizedBox(height: 20),
-                        CustomElevatedButton(
-                          label: 'Create Account',
-                          onTap: register,
-                          textStyle: NewStylesManager.textstyle20,
-                        ),
-                        const SizedBox(height: 5),
-                        Row(
-                          mainAxisAlignment: .center,
-                          children: [
-                            Text(
-                              'Already Have Account ? ',
-                              style: NewStylesManager.textstyle14,
-                            ),
-                            TextButton(
-                              onPressed: () {
-                                Navigator.of(
-                                  context,
-                                ).pushReplacementNamed(Routes.login);
-                              },
-                              child: Text(
-                                'Login',
-                                style: NewStylesManager.textstyle14PrimaryBold,
-                              ),
-                            ),
-                          ],
-                        ),
-                        const SizedBox(height: 18),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Container(
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 6,
-                                vertical: 4,
-                              ),
-                              decoration: BoxDecoration(
-                                border: Border.all(color: ColorManager.primary),
-                                borderRadius: BorderRadius.circular(30),
-                              ),
-                              child: Row(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  _buildLanguageFlag(
-                                    imagePath: 'assets/images/us.png',
-                                    languageCode: 'us',
-                                  ),
-                                  const SizedBox(width: 8),
-                                  _buildLanguageFlag(
-                                    imagePath: 'assets/images/eg.png',
-                                    languageCode: 'eg',
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ],
                         ),
                       ],
                     ),
-                  ),
+                    const SizedBox(height: 18),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Container(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 6,
+                            vertical: 4,
+                          ),
+                          decoration: BoxDecoration(
+                            border: Border.all(color: ColorManager.primary),
+                            borderRadius: BorderRadius.circular(30),
+                          ),
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              _buildLanguageFlag(
+                                imagePath: 'assets/images/us.png',
+                                languageCode: 'us',
+                              ),
+                              const SizedBox(width: 8),
+                              _buildLanguageFlag(
+                                imagePath: 'assets/images/eg.png',
+                                languageCode: 'eg',
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
                 ),
               ),
             ),
-          );
-        },
+          ),
+        ),
       ),
     );
   }
