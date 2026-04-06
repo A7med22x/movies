@@ -13,6 +13,13 @@ import 'package:dio/dio.dart' as _i361;
 import 'package:get_it/get_it.dart' as _i174;
 import 'package:injectable/injectable.dart' as _i526;
 import 'package:movies/core/di/register_module.dart' as _i54;
+import 'package:movies/features/auth/data/data_source/auth_data_source.dart'
+    as _i29;
+import 'package:movies/features/auth/data/data_source/auth_firebase_data_source.dart'
+    as _i585;
+import 'package:movies/features/auth/data/repository/auth_repository.dart'
+    as _i490;
+import 'package:movies/features/auth/view_model/auth_view_model.dart' as _i891;
 import 'package:movies/features/home/data/data_sources/remote/movies_api_remote_data_source.dart'
     as _i398;
 import 'package:movies/features/home/data/data_sources/remote/movies_remote_data_source.dart'
@@ -50,13 +57,20 @@ extension GetItInjectableX on _i174.GetIt {
     gh.lazySingleton<_i149.MovieDetailsRemoteDataSource>(
       () => _i816.MovieDetailsAPIRemoteDataSource(gh<_i361.Dio>()),
     );
+    gh.singleton<_i29.AuthDataSource>(() => _i585.AuthFirebaseDataSource());
     gh.lazySingleton<_i129.MovieDetailsRepository>(
       () => _i129.MovieDetailsRepository(
         gh<_i149.MovieDetailsRemoteDataSource>(),
       ),
     );
+    gh.singleton<_i490.AuthRepository>(
+      () => _i490.AuthRepository(gh<_i29.AuthDataSource>()),
+    );
     gh.lazySingleton<_i194.MoviesRepository>(
       () => _i194.MoviesRepository(gh<_i696.MoviesRemoteDataSource>()),
+    );
+    gh.singleton<_i891.AuthViewModel>(
+      () => _i891.AuthViewModel(gh<_i490.AuthRepository>()),
     );
     gh.factory<_i164.MoviesViewModel>(
       () => _i164.MoviesViewModel(gh<_i194.MoviesRepository>()),

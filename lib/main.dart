@@ -8,6 +8,7 @@ import 'package:movies/core/app_bloc_observer.dart';
 import 'package:movies/core/di/service_locator.dart';
 import 'package:movies/core/routes/route_generator.dart';
 import 'package:movies/core/routes/routes.dart';
+import 'package:movies/features/auth/view_model/auth_view_model.dart';
 import 'package:movies/features/home/view_model/movies_view_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -23,6 +24,8 @@ Future<void> main() async {
     MultiBlocProvider(
       providers: [
         BlocProvider(create: (context) => serviceLocator<MoviesViewModel>()),
+        BlocProvider(create: (context) => serviceLocator<AuthViewModel>()),
+        //BlocProvider(create: (_)=>AuthViewModel(repository))
       ],
       child: MoviesApp(hasSeenIntro: hasSeenIntro),
     ),
