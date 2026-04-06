@@ -1,12 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:movies/core/di/service_locator.dart';
 import 'package:movies/core/resources/color_manager.dart';
 import 'package:movies/core/resources/new_styles_manager.dart';
 import 'package:movies/core/routes/routes.dart';
+import 'package:movies/core/utils/ui_utils.dart';
 import 'package:movies/core/utils/validator.dart';
 import 'package:movies/core/widgets/custom_elevated_button.dart';
 import 'package:movies/core/widgets/custom_text_field.dart';
-import 'package:movies/core/widgets/firebase_services.dart';
+import 'package:movies/core/widgets/loading_indicator.dart';
+import 'package:movies/features/auth/view_model/auth_states.dart';
+import 'package:movies/features/auth/view_model/auth_view_model.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -114,11 +119,32 @@ class _LoginScreenState extends State<LoginScreen> {
                     ],
                   ),
                   const SizedBox(height: 10),
-                  CustomElevatedButton(
-                    label: 'Login',
-                    onTap: login,
-                    textStyle: NewStylesManager.textstyle20,
+                  BlocListener<AuthViewModel, AuthState>(
+                    listener: (context, state) {
+                      if (state is LoginLoading ||
+                          state is GoogleLoginLoading) {
+                        UIUtils.showLoading(context);
+                      }
+                     else if (state is LoginSuccess ||
+                          state is GoogleLoginSuccess) {
+                        UIUtils.hideLoading(context);
+                        Navigator.of(context).pushReplacementNamed(Routes.home);
+                      } else if (state is LoginError) {
+                        UIUtils.hideLoading(context);
+                        UIUtils.showErrorMessage(state.message);
+                      } else if (state is GoogleLoginError) {
+                        UIUtils.hideLoading(context);
+                        UIUtils.showErrorMessage(state.message);
+                      }
+                    },
+                    child: CustomElevatedButton(
+                          label: 'Login',
+                          onTap: login,
+                          textStyle: NewStylesManager.textstyle20,
+                        ),
                   ),
+                
+                  
                   const SizedBox(height: 5),
                   Row(
                     mainAxisAlignment: .center,
@@ -174,7 +200,10 @@ class _LoginScreenState extends State<LoginScreen> {
                   CustomElevatedButton(
                     label: 'Login With Google',
                     textStyle: NewStylesManager.textstyle20,
-                    onTap: () {},
+                    onTap: () {
+                      context.read<AuthViewModel>().loginWithGoogle();
+                      //FirebaseServices.loginWithGoogle(context);
+                    },
                     prefixIcon: SvgPicture.asset('assets/icons/google.svg'),
                   ),
                   const SizedBox(height: 30),
@@ -218,12 +247,16 @@ class _LoginScreenState extends State<LoginScreen> {
 
   void login() {
     if (formKey.currentState!.validate()) {
-      FirebaseServices.login(
+      context.read<AuthViewModel>().login(
         email: emailController.text,
         password: passwordController.text,
-      ).then((user) {
-        Navigator.of(context).pushReplacementNamed(Routes.home);
-      });
+      );
+      // FirebaseServices.login(
+      //   email: emailController.text,
+      //   password: passwordController.text,
+      // ).then((user) {
+      //   Navigator.of(context).pushReplacementNamed(Routes.home);
+      // });
     }
   }
 }

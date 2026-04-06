@@ -1,16 +1,19 @@
 import 'package:carousel_slider_plus/carousel_slider_plus.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:movies/core/di/service_locator.dart';
 import 'package:movies/core/resources/color_manager.dart';
 import 'package:movies/core/resources/new_styles_manager.dart';
 import 'package:movies/core/routes/routes.dart';
+import 'package:movies/core/utils/ui_utils.dart';
 import 'package:movies/core/utils/validator.dart';
 import 'package:movies/core/widgets/custom_app_bar.dart';
 import 'package:movies/core/widgets/custom_elevated_button.dart';
 import 'package:movies/core/widgets/custom_text_field.dart';
-import 'package:movies/core/widgets/firebase_services.dart';
-import 'package:movies/features/auth/data/models/user_model.dart';
 import 'package:movies/features/auth/view/widgets/avatar.dart';
 import 'package:movies/features/auth/view/widgets/avatar_item.dart';
+import 'package:movies/features/auth/view_model/auth_states.dart';
+import 'package:movies/features/auth/view_model/auth_view_model.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
@@ -62,128 +65,143 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: ColorManager.background,
-      appBar: const CustomAppBar(title: 'Register'),
-      body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16),
-          child: SingleChildScrollView(
-            child: Form(
-              key: formKey,
-              child: Column(
-                children: [
-                  const SizedBox(height: 9),
-                  CarouselSlider.builder(
-                    itemCount: Avatar.avatarImages.length,
-                    itemBuilder: (_, index, _) => AvatarItem(index: index),
-                    options: CarouselOptions(
-                      height: MediaQuery.sizeOf(context).height * 0.16,
-                      viewportFraction: 0.33,
-                      enlargeCenterPage: true,
-                      enlargeFactor: 0.35,
+    return BlocListener<AuthViewModel, AuthState>(
+      listener: (context, state) {
+        if (state is RegisterLoading) {
+          return UIUtils.showLoading(context);
+        } else if (state is RegisterSuccess) {
+          UIUtils.hideLoading(context);
+          UIUtils.showSuccessMessage('Account created! Please log in.');
+          Navigator.of(context).pushReplacementNamed(Routes.login);
+        } else if (state is RegisterError) {
+          UIUtils.hideLoading(context);
+          UIUtils.showErrorMessage(state.message);
+        }
+      },
+
+      child: Scaffold(
+        backgroundColor: ColorManager.background,
+        appBar: const CustomAppBar(title: 'Register'),
+        body: SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: SingleChildScrollView(
+              child: Form(
+                key: formKey,
+                child: Column(
+                  children: [
+                    const SizedBox(height: 9),
+                    CarouselSlider.builder(
+                      itemCount: Avatar.avatarImages.length,
+                      itemBuilder: (_, index, _) => AvatarItem(index: index),
+                      options: CarouselOptions(
+                        height: MediaQuery.sizeOf(context).height * 0.16,
+                        viewportFraction: 0.33,
+                        enlargeCenterPage: true,
+                        enlargeFactor: 0.35,
+                      ),
                     ),
-                  ),
-                  const SizedBox(height: 10),
-                  const Text('Avatar', style: NewStylesManager.textstyle16),
-                  const SizedBox(height: 12),
-                  CustomTextField(
-                    prefixIconImageName: 'assets/icons/name.svg',
-                    hintText: 'Name',
-                    controller: nameController,
-                    validator: Validator.validateFullName,
-                  ),
-                  const SizedBox(height: 22),
-                  CustomTextField(
-                    prefixIconImageName: 'assets/icons/email.svg',
-                    hintText: 'Email',
-                    controller: emailController,
-                    validator: Validator.validateEmail,
-                  ),
-                  const SizedBox(height: 22),
-                  CustomTextField(
-                    hintText: 'Password',
-                    prefixIconImageName: 'assets/icons/password.svg',
-                    isPassword: true,
-                    controller: passwordController,
-                    validator: Validator.validatePassword,
-                  ),
-                  const SizedBox(height: 22),
-                  CustomTextField(
-                    hintText: 'Confirm Password',
-                    prefixIconImageName: 'assets/icons/password.svg',
-                    isPassword: true,
-                    controller: confirmPasswordController,
-                    validator: (value) => Validator.validateConfirmPassword(
-                      value,
-                      passwordController.text,
+                    const SizedBox(height: 10),
+                    const Text('Avatar', style: NewStylesManager.textstyle16),
+                    const SizedBox(height: 12),
+                    CustomTextField(
+                      prefixIconImageName: 'assets/icons/name.svg',
+                      hintText: 'Name',
+                      controller: nameController,
+                      validator: Validator.validateFullName,
                     ),
-                  ),
-                  const SizedBox(height: 22),
-                  CustomTextField(
-                    hintText: 'Phone Number',
-                    prefixIconImageName: 'assets/icons/phone.svg',
-                    controller: phoneNumberController,
-                    validator: Validator.validatePhoneNumber,
-                  ),
-                  const SizedBox(height: 20),
-                  CustomElevatedButton(
-                    label: 'Create Account',
-                    onTap: register,
-                    textStyle: NewStylesManager.textstyle20,
-                  ),
-                  const SizedBox(height: 5),
-                  Row(
-                    mainAxisAlignment: .center,
-                    children: [
-                      Text(
-                        'Already Have Account ? ',
-                        style: NewStylesManager.textstyle14,
+                    const SizedBox(height: 22),
+                    CustomTextField(
+                      prefixIconImageName: 'assets/icons/email.svg',
+                      hintText: 'Email',
+                      controller: emailController,
+                      validator: Validator.validateEmail,
+                    ),
+                    const SizedBox(height: 22),
+                    CustomTextField(
+                      hintText: 'Password',
+                      prefixIconImageName: 'assets/icons/password.svg',
+                      isPassword: true,
+                      controller: passwordController,
+                      validator: Validator.validatePassword,
+                    ),
+                    const SizedBox(height: 22),
+                    CustomTextField(
+                      hintText: 'Confirm Password',
+                      prefixIconImageName: 'assets/icons/password.svg',
+                      isPassword: true,
+                      controller: confirmPasswordController,
+                      validator: (value) => Validator.validateConfirmPassword(
+                        value,
+                        passwordController.text,
                       ),
-                      TextButton(
-                        onPressed: () {
-                          Navigator.of(
-                            context,
-                          ).pushReplacementNamed(Routes.login);
-                        },
-                        child: Text(
-                          'Login',
-                          style: NewStylesManager.textstyle14PrimaryBold,
+                    ),
+                    const SizedBox(height: 22),
+                    CustomTextField(
+                      hintText: 'Phone Number',
+                      prefixIconImageName: 'assets/icons/phone.svg',
+                      controller: phoneNumberController,
+                      validator: Validator.validatePhoneNumber,
+                    ),
+                    const SizedBox(height: 20),
+                    CustomElevatedButton(
+                      label: 'Create Account',
+                      onTap: register,
+                      textStyle: NewStylesManager.textstyle20,
+                    ),
+                    const SizedBox(height: 5),
+                    Row(
+                      mainAxisAlignment: .center,
+                      children: [
+                        Text(
+                          'Already Have Account ? ',
+                          style: NewStylesManager.textstyle14,
                         ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 18),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Container(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 6,
-                          vertical: 4,
+                        TextButton(
+                          onPressed: () {
+                            Navigator.of(
+                              context,
+                            ).pushReplacementNamed(Routes.login);
+                          },
+                          child: Text(
+                            'Login',
+                            style: NewStylesManager.textstyle14PrimaryBold,
+                          ),
                         ),
-                        decoration: BoxDecoration(
-                          border: Border.all(color: ColorManager.primary),
-                          borderRadius: BorderRadius.circular(30),
+                      ],
+                    ),
+                    const SizedBox(height: 18),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Container(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 6,
+                            vertical: 4,
+                          ),
+                          decoration: BoxDecoration(
+                            border: Border.all(color: ColorManager.primary),
+                            borderRadius: BorderRadius.circular(30),
+                          ),
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              _buildLanguageFlag(
+                                imagePath: 'assets/images/us.png',
+                                languageCode: 'us',
+                              ),
+                              const SizedBox(width: 8),
+                              _buildLanguageFlag(
+                                imagePath: 'assets/images/eg.png',
+                                languageCode: 'eg',
+                              ),
+                            ],
+                          ),
                         ),
-                        child: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            _buildLanguageFlag(
-                              imagePath: 'assets/images/us.png',
-                              languageCode: 'us',
-                            ),
-                            const SizedBox(width: 8),
-                            _buildLanguageFlag(
-                              imagePath: 'assets/images/eg.png',
-                              languageCode: 'eg',
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
+                      ],
+                    ),
+                  ],
+                ),
               ),
             ),
           ),
@@ -194,16 +212,22 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
   void register() {
     if (formKey.currentState!.validate()) {
-      FirebaseServices.register(
+      context.read<AuthViewModel>().register(
         name: nameController.text,
         email: emailController.text,
         password: passwordController.text,
         confirmPassword: confirmPasswordController.text,
         phoneNumber: phoneNumberController.text,
-      ).then((user){
-        Navigator.of(context).pushReplacementNamed(Routes.login);
-      });
-      
+      );
+      // FirebaseServices.register(
+      // name: nameController.text,
+      // email: emailController.text,
+      // password: passwordController.text,
+      // confirmPassword: confirmPasswordController.text,
+      // phoneNumber: phoneNumberController.text,
+      // ).then((user) {
+      //   Navigator.of(context).pushReplacementNamed(Routes.login);
+      // });
     }
   }
 }
