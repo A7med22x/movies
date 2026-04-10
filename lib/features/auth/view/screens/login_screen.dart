@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:movies/core/di/service_locator.dart';
 import 'package:movies/core/resources/color_manager.dart';
 import 'package:movies/core/resources/new_styles_manager.dart';
 import 'package:movies/core/routes/routes.dart';
@@ -9,7 +8,6 @@ import 'package:movies/core/utils/ui_utils.dart';
 import 'package:movies/core/utils/validator.dart';
 import 'package:movies/core/widgets/custom_elevated_button.dart';
 import 'package:movies/core/widgets/custom_text_field.dart';
-import 'package:movies/core/widgets/loading_indicator.dart';
 import 'package:movies/features/auth/view_model/auth_states.dart';
 import 'package:movies/features/auth/view_model/auth_view_model.dart';
 

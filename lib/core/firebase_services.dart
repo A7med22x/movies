@@ -64,7 +64,6 @@ class FirebaseServices {
     );
     return FirebaseAuth.instance.signInWithCredential(credentials);
     } catch (e) {
-      print('google login failed');
       return null;
       
     }
@@ -76,7 +75,6 @@ class FirebaseServices {
     Navigator.of(context).pushReplacementNamed(Routes.home);
     } catch (e) {
       UIUtils.showErrorMessage(e.toString());
-      
     }
   }
 }

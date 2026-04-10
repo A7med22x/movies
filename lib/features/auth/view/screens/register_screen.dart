@@ -1,7 +1,6 @@
 import 'package:carousel_slider_plus/carousel_slider_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:movies/core/di/service_locator.dart';
 import 'package:movies/core/resources/color_manager.dart';
 import 'package:movies/core/resources/new_styles_manager.dart';
 import 'package:movies/core/routes/routes.dart';

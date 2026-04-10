@@ -33,7 +33,7 @@ class _HomeScreenState extends State<HomeScreen> {
         child: ClipRRect(
           borderRadius: const BorderRadius.all(Radius.circular(15)),
           child: SizedBox(
-            height: MediaQuery.sizeOf(context).height * 0.08,
+            height: 70,
             child: BottomNavigationBar(
               currentIndex: currentIndex,
               onTap: (value) => changeSelectedIndex(value),

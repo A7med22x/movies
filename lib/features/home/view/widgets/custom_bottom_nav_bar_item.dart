@@ -11,10 +11,14 @@ class CustomBottomNavBarItem extends BottomNavigationBarItem {
         label: title,
         icon: SvgPicture.asset(
           iconPath,
+          width: 24,
+          height: 24,
           colorFilter: ColorFilter.mode(ColorManager.white, BlendMode.srcIn),
         ),
         activeIcon: SvgPicture.asset(
           iconPath,
+          width: 24,
+          height: 24,
           colorFilter: ColorFilter.mode(ColorManager.primary, BlendMode.srcIn),
         ),
       );

@@ -25,7 +25,6 @@ Future<void> main() async {
       providers: [
         BlocProvider(create: (context) => serviceLocator<MoviesViewModel>()),
         BlocProvider(create: (context) => serviceLocator<AuthViewModel>()),
-        //BlocProvider(create: (_)=>AuthViewModel(repository))
       ],
       child: MoviesApp(hasSeenIntro: hasSeenIntro),
     ),
@@ -46,8 +45,7 @@ class MoviesApp extends StatelessWidget {
       builder: (_, _) => MaterialApp(
         debugShowCheckedModeBanner: false,
         onGenerateRoute: RouteGenerator.getRoute,
-        initialRoute: Routes.login,
-        //initialRoute: hasSeenIntro ? Routes.home : Routes.onBoarding,
+        initialRoute: hasSeenIntro ? Routes.login : Routes.onBoarding,
       ),
     );
   }
