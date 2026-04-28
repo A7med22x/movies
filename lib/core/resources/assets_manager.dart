@@ -27,4 +27,9 @@ class IconsAssets {
   static const String star = '$_iconsPath/star.svg';
   static const String marked = '$_iconsPath/marked.svg';
   static const String heart = '$_iconsPath/heart.svg';
+  static const String wishlist = '$_iconsPath/wishlist.svg';
+  static const String history = '$_iconsPath/history.svg';
+  static const String user = '$_iconsPath/user.svg';
+  static const String exit = '$_iconsPath/exit.png';
+  static const String phone = '$_iconsPath/phone.svg';
 }

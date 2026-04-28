@@ -6,6 +6,7 @@ import 'package:movies/features/auth/view/screens/register_screen.dart';
 import 'package:movies/features/home/view/screens/home_screen.dart';
 import 'package:movies/features/movie_details/view/screens/movie_details_screen.dart';
 import 'package:movies/features/onBoarding/view/screens/on_boarding_screen.dart';
+import 'package:movies/features/profile/view/screens/update_profile.dart';
 
 class RouteGenerator {
   static Route<dynamic> getRoute(RouteSettings settings) {
@@ -20,6 +21,8 @@ class RouteGenerator {
         return MaterialPageRoute(builder: (_) => const ForgetPasswordScreen());      
       case Routes.home:
         return MaterialPageRoute(builder: (_) => const HomeScreen());
+      case Routes.updateProfile:
+        return MaterialPageRoute(builder: (_) => const UpdateProfile());
       case Routes.movieDetails:
         final movieId = settings.arguments as int;
         return MaterialPageRoute(

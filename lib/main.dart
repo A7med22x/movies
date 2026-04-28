@@ -45,7 +45,7 @@ class MoviesApp extends StatelessWidget {
       builder: (_, _) => MaterialApp(
         debugShowCheckedModeBanner: false,
         onGenerateRoute: RouteGenerator.getRoute,
-        initialRoute: hasSeenIntro ? Routes.login : Routes.onBoarding,
+        initialRoute: hasSeenIntro ? Routes.home : Routes.onBoarding,
       ),
     );
   }

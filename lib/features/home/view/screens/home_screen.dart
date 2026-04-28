@@ -4,6 +4,7 @@ import 'package:movies/core/resources/color_manager.dart';
 import 'package:movies/features/browse/view/widgets/browse_tab.dart';
 import 'package:movies/features/home/view/widgets/custom_bottom_nav_bar_item.dart';
 import 'package:movies/features/home/view/widgets/home_tab.dart';
+import 'package:movies/features/profile/view/widgets/profile_tab.dart';
 import 'package:movies/features/search/view/widgets/search_tab.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -70,11 +71,3 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 }
 
-class ProfileTab extends StatelessWidget {
-  const ProfileTab({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return const Center(child: Text('Profile Tab'));
-  }
-}
