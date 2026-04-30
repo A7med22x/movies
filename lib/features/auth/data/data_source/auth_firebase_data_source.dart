@@ -26,25 +26,25 @@ class AuthFirebaseDataSource implements AuthDataSource {
     required String phoneNumber,
   }) async {
     try {
-  UserCredential credential = await FirebaseAuth.instance
-      .createUserWithEmailAndPassword(email: email, password: password);
-  UserModel user = UserModel(
-    id: credential.user!.uid,
-    name: name,
-    email: email,
-    phoneNumber: phoneNumber,
-  );
-  CollectionReference<UserModel> usersCollection = getUsersCollection();
-  await usersCollection
-      .doc(user.id) //credential.user!.uid = user.id
-      .set(user);
-  return user;
-} catch (e) {
+      UserCredential credential = await FirebaseAuth.instance
+          .createUserWithEmailAndPassword(email: email, password: password);
+      UserModel user = UserModel(
+        id: credential.user!.uid,
+        name: name,
+        email: email,
+        phoneNumber: phoneNumber,
+      );
+      CollectionReference<UserModel> usersCollection = getUsersCollection();
+      await usersCollection
+          .doc(user.id) //credential.user!.uid = user.id
+          .set(user);
+      return user;
+    } catch (e) {
       String? message;
-     if (e is FirebaseAuthException) {
-      message = e.message;
-       
-     } throw RemoteException(message ?? 'Failed to Register');
+      if (e is FirebaseAuthException) {
+        message = e.message;
+      }
+      throw RemoteException(message ?? 'Failed to Register');
     }
   }
 
@@ -61,12 +61,12 @@ class AuthFirebaseDataSource implements AuthDataSource {
           .doc(credential.user!.uid)
           .get();
       return documentSnapshot.data()!;
-    }  catch (e) {
+    } catch (e) {
       String? message;
-     if (e is FirebaseAuthException) {
-      message = e.message;
-       
-     } throw RemoteException(message ?? 'Failed to Login');
+      if (e is FirebaseAuthException) {
+        message = e.message;
+      }
+      throw RemoteException(message ?? 'Failed to Login');
     }
   }
 
@@ -84,5 +84,42 @@ class AuthFirebaseDataSource implements AuthDataSource {
     );
     final userC = FirebaseAuth.instance.signInWithCredential(credentials);
     return userC;
+  }
+
+  @override
+  Future<UserModel?> getUserById(String userId) async {
+    try {
+      final doc = await getUsersCollection().doc(userId).get();
+      return doc.data();
+    } catch (e) {
+      throw RemoteException('Failed to get user');
+    }
+  }
+
+  @override
+  Future<void> addMovieToFavorites(String movieId) async {
+    await getUsersCollection()
+        .doc(FirebaseAuth.instance.currentUser!.uid)
+        .update({
+          'favoriteMoviesIds': FieldValue.arrayUnion([movieId]),
+        });
+  }
+
+  @override
+  Future<void> removeMovieFromFavorites(String movieId) async {
+    await getUsersCollection()
+        .doc(FirebaseAuth.instance.currentUser!.uid)
+        .update({
+          'favoriteMoviesIds': FieldValue.arrayRemove([movieId]),
+        });
+  }
+
+  @override
+  Future<void> addMovieToMoviesWatchedHistory(String movieId) async {
+    await getUsersCollection()
+        .doc(FirebaseAuth.instance.currentUser!.uid)
+        .update({
+          'moviesWatchedHistoryIds': FieldValue.arrayUnion([movieId]),
+        });
   }
 }

@@ -1,5 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
+import 'package:movies/features/auth/data/models/user_model.dart';
 import 'package:movies/features/auth/data/repository/auth_repository.dart';
 import 'package:movies/features/auth/view_model/auth_states.dart';
 
@@ -48,5 +49,70 @@ class AuthViewModel extends Cubit<AuthState> {
       (failure) => emit(GoogleLoginError(failure.message)),
       (_) => emit(GoogleLoginSuccess()),
     );
+  }
+
+  UserModel? currentUser;
+
+  void updateCurrentUser(UserModel? user) {
+    currentUser = user;
+    if (user != null) {
+      emit(UserUpdated(user));
+    }
+  }
+
+  bool checkMovieIsFavorite(String movieId) {
+    return currentUser!.favoriteMoviesIds!.contains(movieId);
+  }
+
+  Future<void> addMovieToFavorites(String movieId) async {
+    if (currentUser == null) return;
+
+    currentUser!.favoriteMoviesIds ??= [];
+    if (!currentUser!.favoriteMoviesIds!.contains(movieId)) {
+      currentUser!.favoriteMoviesIds!.add(movieId);
+    }
+
+    emit(UserUpdated(currentUser!));
+
+    final result = await repository.addMovieToFavorites(movieId);
+
+    result.fold((failure) {
+      currentUser!.favoriteMoviesIds!.remove(movieId);
+      emit(UserUpdated(currentUser!));
+    }, (_) {});
+  }
+
+  Future<void> removeMovieFromFavorites(String movieId) async {
+    if (currentUser == null) return;
+    if (currentUser!.favoriteMoviesIds!.contains(movieId)) {
+      currentUser!.favoriteMoviesIds?.remove(movieId);
+    }
+
+    emit(UserUpdated(currentUser!));
+
+    final result = await repository.removeMovieFromFavorites(movieId);
+
+    result.fold((failure) {
+      currentUser!.favoriteMoviesIds?.add(movieId);
+      emit(UserUpdated(currentUser!));
+    }, (_) {});
+  }
+
+  Future<void> addMovieToMoviesWatchedHistory(String movieId) async {
+    if (currentUser == null) return;
+
+    currentUser!.moviesWatchedHistoryIds ??= [];
+    if (!currentUser!.moviesWatchedHistoryIds!.contains(movieId)) {
+      currentUser!.moviesWatchedHistoryIds!.add(movieId);
+    }
+
+    emit(UserUpdated(currentUser!));
+
+    final result = await repository.addMovieToMoviesWatchedHistory(movieId);
+
+    result.fold((failure) {
+      currentUser!.moviesWatchedHistoryIds!.remove(movieId);
+      emit(UserUpdated(currentUser!));
+    }, (_) {});
   }
 }

@@ -8,6 +8,9 @@ import 'package:movies/core/app_bloc_observer.dart';
 import 'package:movies/core/di/service_locator.dart';
 import 'package:movies/core/routes/route_generator.dart';
 import 'package:movies/core/routes/routes.dart';
+import 'package:movies/features/auth/data/data_source/auth_data_source.dart';
+import 'package:movies/features/auth/data/data_source/auth_shared_pref_local_data_source.dart';
+import 'package:movies/features/auth/data/models/user_model.dart';
 import 'package:movies/features/auth/view_model/auth_view_model.dart';
 import 'package:movies/features/home/view_model/movies_view_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -17,24 +20,41 @@ Future<void> main() async {
   await Firebase.initializeApp();
   Bloc.observer = AppBlocObserver();
   await configureDependencies();
-  SharedPreferences preferences = await SharedPreferences.getInstance();
-  final hasSeenIntro = preferences.getBool('hasSeenIntro') ?? false;
   await dotenv.load(fileName: ".env");
+  final preferences = await SharedPreferences.getInstance();
+  final hasSeenIntro = preferences.getBool('hasSeenIntro') ?? false;
+  final savedUserId = await serviceLocator<AuthSharedPrefLocalDataSource>()
+      .getUserId();
+
+  UserModel? user;
+
+  if (savedUserId.isNotEmpty) {
+    final fetchedUser = await serviceLocator<AuthDataSource>().getUserById(
+      savedUserId,
+    );
+
+    user = fetchedUser;
+  }
+
   runApp(
     MultiBlocProvider(
       providers: [
         BlocProvider(create: (context) => serviceLocator<MoviesViewModel>()),
-        BlocProvider(create: (context) => serviceLocator<AuthViewModel>()),
+        BlocProvider(
+          create: (context) =>
+              serviceLocator<AuthViewModel>()..updateCurrentUser(user),
+        ),
       ],
-      child: MoviesApp(hasSeenIntro: hasSeenIntro),
+      child: MoviesApp(hasSeenIntro: hasSeenIntro, user: user),
     ),
   );
 }
 
 class MoviesApp extends StatelessWidget {
-  const MoviesApp({super.key, required this.hasSeenIntro});
+  const MoviesApp({super.key, required this.hasSeenIntro, required this.user});
 
   final bool hasSeenIntro;
+  final UserModel? user;
 
   @override
   Widget build(BuildContext context) {
@@ -45,7 +65,11 @@ class MoviesApp extends StatelessWidget {
       builder: (_, _) => MaterialApp(
         debugShowCheckedModeBanner: false,
         onGenerateRoute: RouteGenerator.getRoute,
-        initialRoute: hasSeenIntro ? Routes.home : Routes.onBoarding,
+        initialRoute: hasSeenIntro
+            ? (user == null)
+                  ? Routes.login
+                  : Routes.home
+            : Routes.onBoarding,
       ),
     );
   }

@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:movies/core/resources/assets_manager.dart';
 import 'package:movies/core/resources/color_manager.dart';
 import 'package:movies/core/resources/font_manager.dart';
 import 'package:movies/core/resources/styles_manager.dart';
 import 'package:movies/core/widgets/custom_elevated_button.dart';
+import 'package:movies/features/auth/view_model/auth_states.dart';
+import 'package:movies/features/auth/view_model/auth_view_model.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class CustomDetailsSection extends StatelessWidget {
@@ -13,11 +16,13 @@ class CustomDetailsSection extends StatelessWidget {
     required this.year,
     required this.title,
     required this.movieURL,
+    required this.movieId,
   });
 
   final String year;
   final String title;
   final String movieURL;
+  final String movieId;
 
   @override
   Widget build(BuildContext context) {
@@ -35,10 +40,29 @@ class CustomDetailsSection extends StatelessWidget {
               color: ColorManager.white,
             ),
             const Spacer(),
-            IconButton(
-              onPressed: () {},
-              icon: SvgPicture.asset(IconsAssets.marked),
-              color: ColorManager.white,
+            BlocBuilder<AuthViewModel, AuthState>(
+              builder: (context, state) {
+                final authViewModel = context.read<AuthViewModel>();
+
+                final isFavorite = authViewModel.checkMovieIsFavorite(movieId);
+
+                return IconButton(
+                  onPressed: () {
+                    if (isFavorite) {
+                      authViewModel.removeMovieFromFavorites(movieId);
+                    } else {
+                      authViewModel.addMovieToFavorites(movieId);
+                    }
+                  },
+                  icon: SvgPicture.asset(
+                    IconsAssets.marked,
+                    colorFilter: ColorFilter.mode(
+                      isFavorite ? ColorManager.primary : ColorManager.white,
+                      BlendMode.srcIn,
+                    ),
+                  ),
+                );
+              },
             ),
           ],
         ),
@@ -92,8 +116,6 @@ class CustomDetailsSection extends StatelessWidget {
       ],
     );
   }
-
-  
 
   Future<void> watchNow(String url) async {
     final Uri uri = Uri.parse(url);

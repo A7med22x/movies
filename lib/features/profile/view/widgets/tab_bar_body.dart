@@ -4,13 +4,13 @@ import 'package:movies/core/resources/assets_manager.dart';
 import 'package:movies/core/widgets/movie_card.dart';
 
 class TabBarBody extends StatelessWidget {
-  const TabBarBody({super.key});
+  const TabBarBody({super.key, required this.movies});
+
+  final List<Movie> movies;
 
   @override
   Widget build(BuildContext context) {
-    List<Movie> searchMovies = [];
-
-    if (searchMovies.isEmpty) {
+    if (movies.isEmpty) {
       return Center(
         child: Image.asset(
           ImageAssets.empty,
@@ -31,9 +31,9 @@ class TabBarBody extends StatelessWidget {
           childAspectRatio: 0.7,
         ),
         itemBuilder: (_, index) {
-          return MovieCard(movie: searchMovies[index]);
+          return MovieCard(movie: movies[index]);
         },
-        itemCount: searchMovies.length,
+        itemCount: movies.length,
       );
     }
   }

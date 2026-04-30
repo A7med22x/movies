@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:movies/core/resources/assets_manager.dart';
@@ -8,6 +9,8 @@ import 'package:movies/core/resources/font_manager.dart';
 import 'package:movies/core/resources/styles_manager.dart';
 import 'package:movies/core/routes/routes.dart';
 import 'package:movies/core/models/movie.dart';
+import 'package:movies/features/auth/view_model/auth_states.dart';
+import 'package:movies/features/auth/view_model/auth_view_model.dart';
 
 class MovieCard extends StatelessWidget {
   const MovieCard({super.key, required this.movie});
@@ -80,6 +83,44 @@ class MovieCard extends StatelessWidget {
                     ),
                   ],
                 ),
+              ),
+            ),
+            Positioned(
+              top: height * 0.01,
+              right: width * 0.02,
+              child: BlocBuilder<AuthViewModel, AuthState>(
+                builder: (context, state) {
+                  final authViewModel = context.read<AuthViewModel>();
+
+                  final isFavorite = authViewModel.checkMovieIsFavorite(
+                    movie.id.toString(),
+                  );
+
+                  return Container(
+                    decoration: BoxDecoration(
+                      color: ColorManager.background.withValues(alpha: 0.7),
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: IconButton(
+                      onPressed: () {
+                        if (isFavorite) {
+                          authViewModel.removeMovieFromFavorites(
+                            movie.id.toString(),
+                          );
+                        } else {
+                          authViewModel.addMovieToFavorites(
+                            movie.id.toString(),
+                          );
+                        }
+                      },
+                      icon: Icon(
+                        isFavorite ? Icons.favorite : Icons.favorite_border,
+                        color: ColorManager.primary,
+                        size: 24,
+                      ),
+                    ),
+                  );
+                },
               ),
             ),
           ],

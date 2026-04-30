@@ -73,6 +73,7 @@ class MovieDetailsScreen extends StatelessWidget {
                               movieURL: movie.url!,
                               year: '${movie.year}',
                               title: movie.title!,
+                              movieId: movieId.toString(),
                             ),
                           ),
                           Positioned(

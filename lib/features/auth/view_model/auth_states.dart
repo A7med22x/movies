@@ -36,3 +36,9 @@ class GoogleLoginError extends AuthState {
   final String message;
   GoogleLoginError(this.message);
 }
+
+class UserUpdated extends AuthState {
+  final UserModel user;
+
+  UserUpdated(this.user);
+}

@@ -9,6 +9,16 @@ abstract class AuthDataSource {
     required String confirmPassword,
     required String phoneNumber,
   });
+
   Future<UserModel> login({required String email, required String password});
+
   Future<UserCredential?> signInWithGoogle();
+
+  Future<UserModel?> getUserById(String userId);
+
+  Future<void> addMovieToFavorites(String movieId);
+
+  Future<void> removeMovieFromFavorites(String movieId);
+  
+  Future<void> addMovieToMoviesWatchedHistory(String movieId);
 }

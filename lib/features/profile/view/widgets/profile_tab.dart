@@ -43,7 +43,7 @@ class ProfileTab extends StatelessWidget {
           ];
         },
 
-        body: TabBarView(children: [TabBarBody(), TabBarBody()]),
+        body: TabBarView(children: [TabBarBody(movies: []), TabBarBody(movies: [])]),
       ),
     );
   }

@@ -4,3 +4,7 @@ class APIConstants {
   static const String movieDetailsEndpoint = 'movie_details.json';
   static const String movieSuggestionsEndpoint = 'movie_suggestions.json';
 }
+
+class CacheKeys {
+  static const String userId = 'userId';
+}

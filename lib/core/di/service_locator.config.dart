@@ -17,6 +17,8 @@ import 'package:movies/features/auth/data/data_source/auth_data_source.dart'
     as _i29;
 import 'package:movies/features/auth/data/data_source/auth_firebase_data_source.dart'
     as _i585;
+import 'package:movies/features/auth/data/data_source/auth_shared_pref_local_data_source.dart'
+    as _i818;
 import 'package:movies/features/auth/data/repository/auth_repository.dart'
     as _i490;
 import 'package:movies/features/auth/view_model/auth_view_model.dart' as _i891;
@@ -63,20 +65,26 @@ extension GetItInjectableX on _i174.GetIt {
         gh<_i149.MovieDetailsRemoteDataSource>(),
       ),
     );
-    gh.singleton<_i490.AuthRepository>(
-      () => _i490.AuthRepository(gh<_i29.AuthDataSource>()),
+    gh.singleton<_i818.AuthSharedPrefLocalDataSource>(
+      () => _i818.AuthSharedPrefLocalDataSource(gh<_i460.SharedPreferences>()),
     );
     gh.lazySingleton<_i194.MoviesRepository>(
       () => _i194.MoviesRepository(gh<_i696.MoviesRemoteDataSource>()),
     );
-    gh.singleton<_i891.AuthViewModel>(
-      () => _i891.AuthViewModel(gh<_i490.AuthRepository>()),
-    );
     gh.factory<_i164.MoviesViewModel>(
       () => _i164.MoviesViewModel(gh<_i194.MoviesRepository>()),
     );
+    gh.singleton<_i490.AuthRepository>(
+      () => _i490.AuthRepository(
+        gh<_i29.AuthDataSource>(),
+        gh<_i818.AuthSharedPrefLocalDataSource>(),
+      ),
+    );
     gh.factory<_i92.MovieDetailsViewModel>(
       () => _i92.MovieDetailsViewModel(gh<_i129.MovieDetailsRepository>()),
+    );
+    gh.singleton<_i891.AuthViewModel>(
+      () => _i891.AuthViewModel(gh<_i490.AuthRepository>()),
     );
     return this;
   }
