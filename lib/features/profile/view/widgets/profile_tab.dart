@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:movies/core/resources/assets_manager.dart';
 import 'package:movies/core/resources/color_manager.dart';
+import 'package:movies/features/auth/view_model/auth_view_model.dart';
 import 'package:movies/features/profile/view/widgets/profile_tab_header_content.dart';
 import 'package:movies/features/profile/view/widgets/tab_bar_body.dart';
 import 'package:movies/features/profile/view/widgets/tab_bar_item.dart';
@@ -10,6 +12,7 @@ class ProfileTab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final user = context.read<AuthViewModel>().currentUser!;
     return DefaultTabController(
       length: 2,
       child: NestedScrollView(
@@ -17,8 +20,12 @@ class ProfileTab extends StatelessWidget {
           return [
             SliverToBoxAdapter(
               child: Container(
-                color: Colors.red, // 👈 debug
-                child: ProfileTabHeaderContent(),
+                color: Colors.red,
+                child: ProfileTabHeaderContent(
+                  name: user.name,
+                  wishListCount: user.favoriteMoviesIds!.length,
+                  historyCount: user.moviesWatchedHistoryIds!.length,
+                ),
               ),
             ),
             SliverAppBar(
@@ -43,7 +50,12 @@ class ProfileTab extends StatelessWidget {
           ];
         },
 
-        body: TabBarView(children: [TabBarBody(movies: []), TabBarBody(movies: [])]),
+        body: TabBarView(
+          children: [
+            TabBarBody(ids: user.favoriteMoviesIds!),
+            TabBarBody(ids: user.moviesWatchedHistoryIds!),
+          ],
+        ),
       ),
     );
   }

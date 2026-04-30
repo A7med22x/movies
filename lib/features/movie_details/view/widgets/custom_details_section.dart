@@ -69,7 +69,7 @@ class CustomDetailsSection extends StatelessWidget {
         const Spacer(),
         InkWell(
           onTap: () {
-            watchNow(movieURL);
+            watchNow(movieURL, context);
           },
           child: Image.asset(
             ImageAssets.watch,
@@ -108,7 +108,7 @@ class CustomDetailsSection extends StatelessWidget {
           child: CustomElevatedButton(
             label: 'Watch',
             onTap: () {
-              watchNow(movieURL);
+              watchNow(movieURL, context);
             },
             backgroundColor: ColorManager.error,
           ),
@@ -117,7 +117,9 @@ class CustomDetailsSection extends StatelessWidget {
     );
   }
 
-  Future<void> watchNow(String url) async {
+  Future<void> watchNow(String url, BuildContext context) async {
+    context.read<AuthViewModel>().addMovieToMoviesWatchedHistory(movieId);
+
     final Uri uri = Uri.parse(url);
 
     if (!await launchUrl(uri, mode: LaunchMode.inAppWebView)) {

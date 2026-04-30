@@ -13,6 +13,7 @@ import 'package:movies/features/auth/data/data_source/auth_shared_pref_local_dat
 import 'package:movies/features/auth/data/models/user_model.dart';
 import 'package:movies/features/auth/view_model/auth_view_model.dart';
 import 'package:movies/features/home/view_model/movies_view_model.dart';
+import 'package:movies/features/profile/view_model/profile_view_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 Future<void> main() async {
@@ -44,6 +45,7 @@ Future<void> main() async {
           create: (context) =>
               serviceLocator<AuthViewModel>()..updateCurrentUser(user),
         ),
+        BlocProvider(create: (context) => serviceLocator<ProfileViewModel>()),
       ],
       child: MoviesApp(hasSeenIntro: hasSeenIntro, user: user),
     ),

@@ -5,7 +5,11 @@ import 'package:movies/core/routes/routes.dart';
 import 'package:movies/core/widgets/custom_elevated_button.dart';
 
 class ProfileTabHeaderContent extends StatelessWidget {
-  const ProfileTabHeaderContent({super.key});
+  const ProfileTabHeaderContent({super.key, required this.name, required this.wishListCount, required this.historyCount});
+
+  final String name;
+  final int wishListCount;
+  final int historyCount;
 
   @override
   Widget build(BuildContext context) {
@@ -31,7 +35,7 @@ class ProfileTabHeaderContent extends StatelessWidget {
                   SizedBox(
                     width: 120,
                     child: Text(
-                      'John Safwat',
+                      name,
                       style: getBoldStyle(
                         color: ColorManager.white,
                         fontSize: 18,
@@ -44,7 +48,7 @@ class ProfileTabHeaderContent extends StatelessWidget {
               Column(
                 children: [
                   Text(
-                    '12',
+                    wishListCount.toString(),
                     style: getBoldStyle(
                       color: ColorManager.white,
                       fontSize: 36,
@@ -63,7 +67,7 @@ class ProfileTabHeaderContent extends StatelessWidget {
               Column(
                 children: [
                   Text(
-                    '10',
+                    historyCount.toString(),
                     style: getBoldStyle(
                       color: ColorManager.white,
                       fontSize: 36,

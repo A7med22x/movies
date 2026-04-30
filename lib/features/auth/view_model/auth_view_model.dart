@@ -101,10 +101,8 @@ class AuthViewModel extends Cubit<AuthState> {
   Future<void> addMovieToMoviesWatchedHistory(String movieId) async {
     if (currentUser == null) return;
 
-    currentUser!.moviesWatchedHistoryIds ??= [];
-    if (!currentUser!.moviesWatchedHistoryIds!.contains(movieId)) {
-      currentUser!.moviesWatchedHistoryIds!.add(movieId);
-    }
+    currentUser!.moviesWatchedHistoryIds!.remove(movieId);
+    currentUser!.moviesWatchedHistoryIds!.insert(0, movieId);
 
     emit(UserUpdated(currentUser!));
 

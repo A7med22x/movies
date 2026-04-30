@@ -3,7 +3,7 @@ import 'package:injectable/injectable.dart';
 import 'package:movies/core/constants.dart';
 import 'package:movies/core/errors/exceptions.dart';
 import 'package:movies/features/movie_details/data/data_sources/remote/movie_details_remote_data_source.dart';
-import 'package:movies/features/movie_details/data/models/movie_details_response.dart';
+import 'package:movies/core/models/movie_details_response.dart';
 import 'package:movies/features/movie_details/data/models/movie_suggestions_response.dart';
 
 @LazySingleton(as: MovieDetailsRemoteDataSource)
