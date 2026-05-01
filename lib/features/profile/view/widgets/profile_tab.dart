@@ -25,6 +25,7 @@ class ProfileTab extends StatelessWidget {
                   name: user.name,
                   wishListCount: user.favoriteMoviesIds!.length,
                   historyCount: user.moviesWatchedHistoryIds!.length,
+                  imageURL: user.imageAvatarURL ?? 'assets/images/avatar2.png',
                 ),
               ),
             ),

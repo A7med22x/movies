@@ -42,3 +42,21 @@ class UserUpdated extends AuthState {
 
   UserUpdated(this.user);
 }
+
+class LogoutLoading extends AuthState {}
+
+class LogoutSuccess extends AuthState {}
+
+class LogoutError extends AuthState {
+  final String message;
+  LogoutError(this.message);
+}
+
+class DeleteUserLoading extends AuthState {}
+
+class DeleteUserSuccess extends AuthState {}
+
+class DeleteUserError extends AuthState {
+  final String message;
+  DeleteUserError(this.message);
+}

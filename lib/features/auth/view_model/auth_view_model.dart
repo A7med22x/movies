@@ -113,4 +113,22 @@ class AuthViewModel extends Cubit<AuthState> {
       emit(UserUpdated(currentUser!));
     }, (_) {});
   }
+
+  Future<void> logout() async {
+    emit(LogoutLoading());
+    final result = await repository.logout();
+    result.fold(
+      (failure) => emit(LogoutError(failure.message)),
+      (_) => emit(LogoutSuccess()),
+    );
+  }
+
+  Future<void> deleteUser(String password) async {
+    emit(DeleteUserLoading());
+    final result = await repository.deleteUser(password);
+    result.fold(
+      (failure) => emit(DeleteUserError(failure.message)),
+      (_) => emit(DeleteUserSuccess()),
+    );
+  }
 }

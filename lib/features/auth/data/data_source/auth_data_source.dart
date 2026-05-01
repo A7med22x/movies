@@ -19,6 +19,10 @@ abstract class AuthDataSource {
   Future<void> addMovieToFavorites(String movieId);
 
   Future<void> removeMovieFromFavorites(String movieId);
-  
+
   Future<void> addMovieToMoviesWatchedHistory(String movieId);
+
+  Future<void> logout();
+  
+  Future<void> deleteUser(String password);
 }

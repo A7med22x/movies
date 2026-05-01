@@ -86,4 +86,24 @@ class AuthRepository {
       return Left(Failure(e.message));
     }
   }
+
+  Future<Either<Failure, void>> logout() async {
+    try {
+      await dataSource.logout();
+      await _localDataSource.saveUserId('');
+      return const Right(null);
+    } on RemoteException catch (e) {
+      return Left(Failure(e.message));
+    }
+  }
+
+  Future<Either<Failure, void>> deleteUser(String password) async {
+    try {
+      await dataSource.deleteUser(password);
+      await _localDataSource.saveUserId('');
+      return const Right(null);
+    } on RemoteException catch (e) {
+      return Left(Failure(e.message));
+    }
+  }
 }

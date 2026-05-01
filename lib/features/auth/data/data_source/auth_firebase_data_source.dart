@@ -122,4 +122,32 @@ class AuthFirebaseDataSource implements AuthDataSource {
           'moviesWatchedHistoryIds': FieldValue.arrayUnion([movieId]),
         });
   }
+
+  @override
+  Future<void> logout() async {
+    await FirebaseAuth.instance.signOut();
+  }
+
+  @override
+  Future<void> deleteUser(String password) async {
+    final user = FirebaseAuth.instance.currentUser;
+
+    if (user == null) {
+      throw Exception("No user logged in");
+    }
+    try {
+      // 1. Re-authenticate
+      final credential = EmailAuthProvider.credential(
+        email: user.email!,
+        password: password,
+      );
+
+      await user.reauthenticateWithCredential(credential);
+
+      // 2. Delete account
+      await user.delete();
+    } on FirebaseAuthException catch (e) {
+      throw Exception(e.message ?? e.code);
+    }
+  }
 }
