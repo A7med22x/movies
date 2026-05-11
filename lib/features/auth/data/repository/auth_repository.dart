@@ -116,4 +116,13 @@ class AuthRepository {
       return Left(Failure(e.message));
     }
   }
+
+  Future<Either<Failure, void>> resetPassword(String email) async {
+    try {
+      await dataSource.resetPassword(email);
+      return const Right(null);
+    } on RemoteException catch (e) {
+      return Left(Failure(e.message));
+    }
+  }
 }

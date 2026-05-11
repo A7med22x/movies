@@ -155,4 +155,9 @@ class AuthFirebaseDataSource implements AuthDataSource {
   Future<void> updateUser(UserModel user) async {
     await getUsersCollection().doc(user.id).update(user.tojson());
   }
+
+  @override
+  Future<void> resetPassword(String email) async {
+    await FirebaseAuth.instance.sendPasswordResetEmail(email: email);
+  }
 }

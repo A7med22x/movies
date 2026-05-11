@@ -73,3 +73,12 @@ class UpdateUserError extends AuthState {
   final String message;
   UpdateUserError(this.message);
 }
+
+class ResetPasswordLoading extends AuthState {}
+
+class ResetPasswordSuccess extends AuthState {}
+
+class ResetPasswordError extends AuthState {
+  final String message;
+  ResetPasswordError(this.message);
+}

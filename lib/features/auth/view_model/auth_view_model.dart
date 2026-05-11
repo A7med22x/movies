@@ -142,4 +142,15 @@ class AuthViewModel extends Cubit<AuthState> {
       emit(UpdateUserSuccess(user));
     });
   }
+
+  Future<void> resetPassword(String email) async {
+    emit(ResetPasswordLoading());
+
+    final result = await repository.resetPassword(email);
+
+    result.fold(
+      (failure) => emit(ResetPasswordError(failure.message)),
+      (_) => emit(ResetPasswordSuccess()),
+    );
+  }
 }

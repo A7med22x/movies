@@ -134,7 +134,9 @@ class _UpdateProfileState extends State<UpdateProfile> {
                 Row(
                   children: [
                     IconButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        Navigator.of(context).pushNamed(Routes.forgetPassword);
+                      },
                       icon: Text(
                         'Reset Password',
                         style: getRegularStyle(
