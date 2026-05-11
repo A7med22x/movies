@@ -17,6 +17,27 @@ class UserModel {
     this.moviesWatchedHistoryIds,
   });
 
+  UserModel copyWith({
+    String? id,
+    String? name,
+    String? email,
+    String? phoneNumber,
+    String? imageAvatarURL,
+    List<String>? favoriteMoviesIds,
+    List<String>? moviesWatchedHistoryIds,
+  }) {
+    return UserModel(
+      id: id ?? this.id,
+      name: name ?? this.name,
+      email: email ?? this.email,
+      phoneNumber: phoneNumber ?? this.phoneNumber,
+      imageAvatarURL: imageAvatarURL ?? this.imageAvatarURL,
+      favoriteMoviesIds: favoriteMoviesIds ?? this.favoriteMoviesIds,
+      moviesWatchedHistoryIds:
+          moviesWatchedHistoryIds ?? this.moviesWatchedHistoryIds,
+    );
+  }
+
   UserModel.fromJson(Map<String, dynamic> json)
     : this(
         id: json['id'],
@@ -24,8 +45,10 @@ class UserModel {
         email: json['email'],
         phoneNumber: json['phoneNumber'],
         imageAvatarURL: json['imageAvatarURL'],
-        favoriteMoviesIds: (json['favoriteMoviesIds'] as List? ?? []).cast<String>(),
-        moviesWatchedHistoryIds: (json['moviesWatchedHistoryIds'] as List? ?? []).cast<String>(),
+        favoriteMoviesIds: (json['favoriteMoviesIds'] as List? ?? [])
+            .cast<String>(),
+        moviesWatchedHistoryIds:
+            (json['moviesWatchedHistoryIds'] as List? ?? []).cast<String>(),
       );
 
   Map<String, dynamic> tojson() => {

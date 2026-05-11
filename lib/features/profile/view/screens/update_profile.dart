@@ -53,12 +53,18 @@ class _UpdateProfileState extends State<UpdateProfile> {
   Widget build(BuildContext context) {
     return BlocListener<AuthViewModel, AuthState>(
       listener: (context, state) {
-        if (state is DeleteUserLoading) {
+        if (state is DeleteUserLoading || state is UpdateUserLoading) {
           UIUtils.showLoading(context);
+        } else if (state is UpdateUserSuccess) {
+          UIUtils.hideLoading(context);
+          UIUtils.showSuccessMessage("Profile updated successfully");
         } else if (state is DeleteUserSuccess) {
           UIUtils.hideLoading(context);
           UIUtils.showSuccessMessage("Account deleted successfully");
           Navigator.of(context).pushReplacementNamed(Routes.login);
+        } else if (state is UpdateUserError) {
+          UIUtils.hideLoading(context);
+          UIUtils.showErrorMessage(state.message);
         } else if (state is DeleteUserError) {
           UIUtils.hideLoading(context);
           UIUtils.showErrorMessage(state.message);
@@ -119,13 +125,6 @@ class _UpdateProfileState extends State<UpdateProfile> {
                 ),
                 const SizedBox(height: 16),
                 CustomTextField(
-                  prefixIconImageName: 'assets/icons/email.svg',
-                  hintText: '',
-                  controller: emailController,
-                  validator: Validator.validateEmail,
-                ),
-                const SizedBox(height: 16),
-                CustomTextField(
                   hintText: '',
                   controller: phoneController,
                   validator: Validator.validatePhoneNumber,
@@ -161,7 +160,20 @@ class _UpdateProfileState extends State<UpdateProfile> {
                 const SizedBox(height: 16),
                 CustomElevatedButton(
                   label: 'Update Data',
-                  onTap: () {},
+                  onTap: () {
+                    final viewModel = context.read<AuthViewModel>();
+                    final user = viewModel.currentUser;
+
+                    if (user == null) return;
+
+                    final updatedUser = user.copyWith(
+                      name: nameController.text.trim(),
+                      phoneNumber: phoneController.text.trim(),
+                      imageAvatarURL: Avatar.avatarImages[selectedAvatarIndex],
+                    );
+
+                    viewModel.updateUser(user: updatedUser);
+                  },
                   textColor: ColorManager.black,
                 ),
                 const SizedBox(height: 16),

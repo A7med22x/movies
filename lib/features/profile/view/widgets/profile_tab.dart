@@ -12,7 +12,7 @@ class ProfileTab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final user = context.read<AuthViewModel>().currentUser!;
+    final user = context.watch<AuthViewModel>().currentUser!;
     return DefaultTabController(
       length: 2,
       child: NestedScrollView(

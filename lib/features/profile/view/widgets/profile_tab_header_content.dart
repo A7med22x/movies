@@ -28,13 +28,10 @@ class ProfileTabHeaderContent extends StatelessWidget {
       listener: (context, state) {
         if (state is LogoutLoading) {
           UIUtils.showLoading(context);
-        }
-        else if (state is LogoutSuccess) {
+        } else if (state is LogoutSuccess) {
           UIUtils.hideLoading(context);
           Navigator.of(context).pushReplacementNamed(Routes.login);
-        }
-
-        else if (state is LogoutError) {
+        } else if (state is LogoutError) {
           UIUtils.hideLoading(context);
           UIUtils.showErrorMessage(state.message);
         }
@@ -59,7 +56,7 @@ class ProfileTabHeaderContent extends StatelessWidget {
                       child: Image.asset(imageURL),
                     ),
                     SizedBox(
-                      width: 120,
+                      width: 150,
                       child: Text(
                         name,
                         style: getBoldStyle(
@@ -67,7 +64,7 @@ class ProfileTabHeaderContent extends StatelessWidget {
                           fontSize: 18,
                         ),
                         textAlign: TextAlign.center,
-                        maxLines: 1,
+                        maxLines: 2,
                       ),
                     ),
                   ],

@@ -131,4 +131,15 @@ class AuthViewModel extends Cubit<AuthState> {
       (_) => emit(DeleteUserSuccess()),
     );
   }
+
+  Future<void> updateUser({required UserModel user}) async {
+    emit(UpdateUserLoading());
+
+    final result = await repository.updateUser(user);
+
+    result.fold((failure) => emit(UpdateUserError(failure.message)), (_) {
+      currentUser = user;
+      emit(UpdateUserSuccess(user));
+    });
+  }
 }

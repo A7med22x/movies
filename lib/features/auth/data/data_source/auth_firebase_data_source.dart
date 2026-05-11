@@ -150,4 +150,9 @@ class AuthFirebaseDataSource implements AuthDataSource {
       throw Exception(e.message ?? e.code);
     }
   }
+
+  @override
+  Future<void> updateUser(UserModel user) async {
+    await getUsersCollection().doc(user.id).update(user.tojson());
+  }
 }

@@ -49,11 +49,11 @@ class AuthRepository {
     }
   }
 
-  Future<Either<Failure,UserCredential?>> signInWithGoogle() async {
+  Future<Either<Failure, UserCredential?>> signInWithGoogle() async {
     try {
-    final userCredential = await dataSource.signInWithGoogle();
-    await _localDataSource.saveUserId(userCredential?.user?.uid ?? '');
-    return Right(userCredential);
+      final userCredential = await dataSource.signInWithGoogle();
+      await _localDataSource.saveUserId(userCredential?.user?.uid ?? '');
+      return Right(userCredential);
     } on RemoteException catch (exception) {
       return Left(Failure(exception.message));
     }
@@ -78,7 +78,8 @@ class AuthRepository {
   }
 
   Future<Either<Failure, void>> addMovieToMoviesWatchedHistory(
-      String movieId) async {
+    String movieId,
+  ) async {
     try {
       await dataSource.addMovieToMoviesWatchedHistory(movieId);
       return const Right(null);
@@ -101,6 +102,15 @@ class AuthRepository {
     try {
       await dataSource.deleteUser(password);
       await _localDataSource.saveUserId('');
+      return const Right(null);
+    } on RemoteException catch (e) {
+      return Left(Failure(e.message));
+    }
+  }
+
+  Future<Either<Failure, void>> updateUser(UserModel user) async {
+    try {
+      await dataSource.updateUser(user);
       return const Right(null);
     } on RemoteException catch (e) {
       return Left(Failure(e.message));

@@ -25,4 +25,6 @@ abstract class AuthDataSource {
   Future<void> logout();
   
   Future<void> deleteUser(String password);
+
+  Future<void> updateUser(UserModel user);
 }

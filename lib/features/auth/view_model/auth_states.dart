@@ -60,3 +60,16 @@ class DeleteUserError extends AuthState {
   final String message;
   DeleteUserError(this.message);
 }
+
+class UpdateUserLoading extends AuthState {}
+
+class UpdateUserSuccess extends AuthState {
+  final UserModel user;
+
+  UpdateUserSuccess(this.user);
+}
+
+class UpdateUserError extends AuthState {
+  final String message;
+  UpdateUserError(this.message);
+}
